@@ -1,7 +1,7 @@
 ################################################################################
 # Stellar - Machine Learning on Graphs
 
-version: '3'
+version: '3.4'
 
 networks:
   stellar-net:
@@ -11,7 +11,7 @@ services:
   ##############################################################################
   # Stellar Ingest - Data ingestion module.
   ingest:
-    image: etd-docker01.it.csiro.au/stellar/ingest:0.0.2-SNAPSHOT
+    image: data61/stellar-ingest:0.0.2-SNAPSHOT
     # Example: no env var is currently used by the ingestor
     environment:
       - DEBUG=false
@@ -29,53 +29,40 @@ services:
   ##############################################################################
   # Stellar Search - Search module.
 
-  # TODO: this  works but is  currently incomplete.  The original  Search docker
-  # compose configuration needs the source  code, to get configuration files, to
-  # run the remaining bits (Elastics search and Kibana).
+  search:
+    # data61stellardev doesn't have permissions to push to data61/ org yet
+    image: data61stellardev/stellar-search:0.0.1-SNAPSHOT
+    command:
+      - "--spring.profiles.active=docker"
+      - "--spring.config.location=/etc/stellar-search/"
+    volumes:
+      - ${STELLAR_SEARCH_APP_CONFIG}/:/etc/stellar-search/:ro
+      - ${STELLAR_SEARCH_DATAPATH}:/data/user
+    ports:
+      - ${STELLAR_SEARCH_REST_PORT}:8080
+    depends_on:
+      - elasticsearch
+    networks:
+      - stellar-net
 
   elasticsearch:
     image: docker.elastic.co/elasticsearch/elasticsearch-oss:${STELLAR_SEARCH_ELASTIC_VERSION}
     volumes:
       - ${STELLAR_SEARCH_ELASTIC_CONFIG}/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml:ro
-    ports:
-      - ${STELLAR_SEARCH_ELASTIC_REST_PORT}:9200
-      - ${STELLAR_SEARCH_ELASTIC_COMM_PORT}:9300
     environment:
       ES_JAVA_OPTS: "-Xmx256m -Xms256m"
     ulimits:
       memlock:
         soft: -1
         hard: -1
+    healthcheck:
+      # yellow (under replicated - which can happen for single node) and green status is considered healthy
+      test:
+        - "CMD-SHELL"
+        - "curl -fs 'http://localhost:9200/_cluster/health?wait_for_status=yellow&timeout=60s&filter_path=status' | grep -qE '(green|yellow)' || exit 1"
+      interval: 1m
+      timeout: 60s
+      retries: 3
+      start_period: 30s
     networks:
       - stellar-net
-
-  kibana:
-    image: docker.elastic.co/kibana/kibana-oss:${STELLAR_SEARCH_ELASTIC_VERSION}
-    volumes:
-      - ${STELLAR_SEARCH_KIBANA_CONFIG}:/usr/share/kibana/config:ro
-    ports:
-      - ${STELLAR_SEARCH_KIBANA_PORT}:5601
-    networks:
-      - stellar-net
-    depends_on:
-      - elasticsearch
-
-  db:
-    image: postgres:9
-    restart: always
-    environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: example
-    ports:
-      - ${STELLAR_SEARCH_DB_PORT}:5432
-    networks:
-      - stellar-net
-
-  adminer:
-    image: adminer
-    restart: always
-    ports:
-        - ${STELLAR_SEARCH_ADMINER_PORT}:8080
-    networks:
-      - stellar-net
-

@@ -1,4 +1,4 @@
-#!/bin/bash  
+#!/usr/bin/env bash
 
 ################################################################################
 # stellar.sh - orchestrate Stellar modules using docker-compose
@@ -12,11 +12,10 @@ script_version="0.0.2"
 SCRIPTPATH="$( cd "$(dirname "$0")" ; pwd -P )"
 
 # Export  all  variables  in  the  config   file,  to  make  them  available  to
-# subprocesses, in particular docker-compose. Note: the two steps are necessary,
-# so that  derived variables are fully  expanded, before being passed  to docke-
-# compose.
+# subprocesses, in particular docker-compose.
+set -a
 . "$SCRIPTPATH/stellar.config"
-export $(cat "$SCRIPTPATH/stellar.config" |grep -v "^ *#"|cut -d"=" -f1|xargs) 
+set +a
 
 ################################################################################
 # Functions
@@ -62,10 +61,11 @@ setup_ingest() {
 
 # All setup tasks needed by Stellar Search
 setup_search() {
+    setup_volume "$STELLAR_SEARCH_DATAPATH" "Stellar Search" "user data directory"
+    setup_volume "$STELLAR_SEARCH_APP_CONFIG" "Stellar Search" "Application config directory"
     setup_volume "$STELLAR_SEARCH_ELASTIC_CONFIG" "Stellar Search" "Elasticsearch config directory"
-    setup_volume "$STELLAR_SEARCH_KIBANA_CONFIG" "Stellar Search" "Kibana config directory"
+    get_webfile $STELLAR_SEARCH_APP_CONFIG/application-docker.yml "Stellar Search" "Application configuration"  https://raw.githubusercontent.com/data61/stellar-search/develop/docker/search/application-docker.yml
     get_webfile $STELLAR_SEARCH_ELASTIC_CONFIG/elasticsearch.yml "Stellar Search" "Elasticsearch configuration"  https://raw.githubusercontent.com/data61/stellar-search/develop/docker/elasticsearch/config/elasticsearch.yml
-    get_webfile $STELLAR_SEARCH_KIBANA_CONFIG/kibana.yml "Stellar Search" "Kibana configuration" https://raw.githubusercontent.com/data61/stellar-search/develop/docker/kibana/config/kibana.yml
 }
 
 # Application setup: calls setup functions for all individual modules.
