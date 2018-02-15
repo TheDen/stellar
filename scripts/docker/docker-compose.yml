@@ -42,6 +42,7 @@ services:
       - ${STELLAR_SEARCH_REST_PORT}:8080
     depends_on:
       - elasticsearch
+      - db
     networks:
       - stellar-net
 
@@ -60,6 +61,27 @@ services:
       test:
         - "CMD-SHELL"
         - "curl -fs 'http://localhost:9200/_cluster/health?wait_for_status=yellow&timeout=60s&filter_path=status' | grep -qE '(green|yellow)' || exit 1"
+      interval: 1m
+      timeout: 60s
+      retries: 3
+      start_period: 30s
+    networks:
+      - stellar-net
+
+  db:
+    image: postgres:alpine
+    volumes:
+      - ${STELLAR_DB_INITSCRIPTS}/:/docker-entrypoint-initdb.d/:ro
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: ${STELLAR_DB_PASSWORD} # only for the super user account
+      # Don't define POSTGRES_USER, POSTGRES_DB, since multiple modules may want their own
+      # DB and user. Instead define per-module roles in /docker-entrypoint-initdb.d/
+      # See docker image doco https://hub.docker.com/_/postgres/
+    healthcheck:
+      test:
+        - "CMD-SHELL"
+        - 'pg_isready --username "$${POSTGRES_USER}" --dbname "$${POSTGRES_DB}" || exit 1'
       interval: 1m
       timeout: 60s
       retries: 3
