@@ -2,8 +2,65 @@
 
 ################################################################################
 # stellar.sh - orchestrate Stellar modules using docker-compose
-script_version="0.0.2"
+script_version="0.0.3"
 ################################################################################
+
+################################################################################
+# Usage
+
+helpmsg() {
+  cat - >&2 <<EOF
+NAME
+    stellar.sh - Machine Learning on Graphs
+
+DESCRIPTION
+    Orchestrate Stellar modules using docker-compose
+
+VERSION
+    ${script_version}
+
+SYNOPSIS
+    stellar.sh [-h|--help]
+
+    stellar.sh [-v|--verbose]
+               [--colour[=<when>]
+               [-n|--no-pull]
+               [--]
+               {start|stop|restart}
+
+COMMAND
+  start
+          Brings up the stellar stack, pulling all images always by default.
+          Delegates to docker-compose pull followed by docker-compsose up
+  stop
+          Stops containers and removes containers, networks, volumes, and
+          images.
+  restart
+          Equivalent to 'stop' followed by 'start'
+
+OPTIONS
+  -h, --help
+          Prints this and exits
+
+  -v, --verbose
+          Enable debug messages
+
+  --colour[=<when>]
+          Specify script log and docker-compose colourising. The possible values
+          of 'when' are 'never', 'always' or 'auto' (default). On 'auto'
+          colouring is enabled if error stream is connected to a terminal, and
+          disabled otherwise.
+
+  -n, --no-pull
+          Disables automatic re-pulling of docker images (if there are updates)
+
+  --
+          Specify end of options; useful if the first non option
+          argument starts with a hyphen
+
+EOF
+
+}
 
 ################################################################################
 # Load Stellar configuration
@@ -33,11 +90,6 @@ enable_log_colours() {
     c=$(printf "\e[1;36m")      # cyan      (timestamp)
     x=$(printf "\e[0m")         # reset     (log message)
 }
-
-if [ -t 2 ]; then
-    # only if standard error is connected to tty (not redirected)
-    enable_log_colours
-fi
 
 # log formatter - do not use directly, use the predefined log levels below
 prog_name="$(basename "$0")"
@@ -70,6 +122,72 @@ debug() {
         logger "$@"
     }
 }
+
+################################################################################
+# Command line arg processing
+
+# defaults
+colour=auto
+
+# There are several ways to parse cmdline args (e.g. GNU getopt (not portable)
+# vs BSD (OSX) getopt vs getopts) - all shit. This solution is both portable,
+# allows for both short/long options, handles whitespace, handles
+# optional-option arguments ;), handles repeatable opt, and frankly doesn't
+# require much code bloat compared with any alternatives I've seen
+
+# Examples valid option formats
+#        | flag     | mandatory arg | optional arg
+# -------+----------+---------------+-------------------
+# short  | -f       | -o arg        | (not supported)
+# long   | --flat   | --opt arg     | --opt
+#        |          | --opt=arg     | --opt=arg (must use '=' with opt-arg)
+
+# For long option processing we can't use process substitution (echo the arg)
+# as OPTIND does not propagate across sub shells so we reassign output in OPTARG
+next_arg() {
+    if [[ $OPTARG == *=* ]]; then
+        # for cases like '--opt=foo'
+        OPTARG="${OPTARG#*=}"
+    else
+        # for cases like '--opt foo'
+        OPTARG="${args[$OPTIND]}"
+        OPTIND=$((OPTIND + 1))
+    fi
+}
+
+# ':' means preceding option character expects one argument, except
+# first ':' which make getopts run in silent mode. We handle errors with
+# wildcard case catch. Long options are considered as the '-' character
+optspec=":hvn-:"
+args=("" "$@")  # dummy first element so $1 and $args[1] are aligned
+while getopts "$optspec" optchar; do
+    case "$optchar" in
+        h) helpmsg ; exit 0 ;;
+        v) verbose=1 ;;
+        n) no_pull=1 ;;
+        -) # long option processing
+            case "$OPTARG" in
+                help)
+                    helpmsg ; exit 0 ;;
+                verbose)
+                    verbose=1 ;;
+                no-pull)
+                    no_pull=1 ;;    
+                color|colour)
+                    colour=auto ;;
+                color=*|colour=*) next_arg
+                    colour="$OPTARG" ;;
+                # opt|opt=*) nextarg    # example option with mandatory arg
+                #   arg="$OPTARG"
+                -) break ;;
+                *) fatal "Unknown option '--${OPTARG}'" "see '${prog_name} --help' for usage" ;;
+            esac
+            ;;
+        *) fatal "Unknown option: '-${OPTARG}'" "See '${prog_name} --help' for usage" ;;
+    esac
+done
+
+shift $((OPTIND-1))
 
 ################################################################################
 # Functions
@@ -141,30 +259,52 @@ setup() {
 }
 
 startme() {
+
+    if [ -n "$no_pull" ]; then
+      info "Not checking for updates to cached images"
+    else
+      info "Checking for updates to images"
+      docker-compose "${docker_colour_opt[@]}" -f "$SCRIPTPATH/docker-compose.yml" -p stellar pull
+    fi
+
     info "Starting stellar..."
-    docker-compose -f "$SCRIPTPATH/docker-compose.yml" -p stellar up -d
+    docker-compose "${docker_colour_opt[@]}" -f "$SCRIPTPATH/docker-compose.yml" -p stellar up -d
 }
 
 stopme() {
     info "Stopping stellar..."
-    docker-compose -f "$SCRIPTPATH/docker-compose.yml" -p stellar down
-}
-
-helpmsg() {
-    echo "Stellar - Machine Learning on Graphs" >&2
-    echo "deployment script v.$script_version" >&2
-    echo "usage: $(basename $0) start|stop|restart" >&2
-    echo "" >&2
+    docker-compose "${docker_colour_opt[@]}" -f "$SCRIPTPATH/docker-compose.yml" -p stellar down
 }
 
 ################################################################################
 # Main
 
+# set colour for both our script and docker-compose
+case "$colour" in
+    always)
+        enable_log_colours
+        ;;
+    never)
+        docker_colour_opt=(--no-ansi)
+        ;;
+    auto)
+        if [ -t 2 ]; then
+            # only if standard error is connected to tty (not redirected)
+            enable_log_colours
+        else
+            docker_colour_opt=(--no-ansi)
+        fi
+        ;;
+    *) fatal "Unknown colour option '${colour}'" "see '${prog_name} --help' for usage" ;;
+esac
+
+if [[ "$#" -ne 1 ]]; then
+    fatal "Expected only 1 argument" "See '${prog_name} --help' for usage"
+fi
+
 case "$1" in 
     start)   setup; startme ;;
     stop)    stopme ;;
     restart) stopme; startme ;;
-    *) helpmsg
-       exit 1
-       ;;
+    *) fatal "Unknown command '${1}'" "see '${prog_name} --help' for usage"
 esac

@@ -30,8 +30,7 @@ services:
   # Stellar Search - Search module.
 
   search:
-    # data61stellardev doesn't have permissions to push to data61/ org yet
-    image: data61stellardev/stellar-search:0.0.1-SNAPSHOT
+    image: data61/stellar-search:0.0.1-SNAPSHOT
     command:
       - "--spring.profiles.active=docker"
       - "--spring.config.location=/etc/stellar-search/"
