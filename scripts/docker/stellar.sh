@@ -223,9 +223,20 @@ get_webfile()  {
     fi
 }
 
+setup_coordinator() {
+    setup_volume "$STELLAR_COORDINATOR_DATAPATH" "Stellar Coordinator" "working directory"
+}
+
 # All setup tasks needed by Stellar Ingest
 setup_ingest() {
     setup_volume "$STELLAR_INGEST_DATAPATH" "Stellar Ingest" "user data directory"
+}
+
+setup_nai() {
+    setup_volume "$STELLAR_EVPLUGINS_DATAPATH"  "Stellar NAI" "working directory"
+    setup_volume "$STELLAR_EVPLUGINS_CONFIG"  "Stellar NAI" "config directory"
+
+    get_webfile $STELLAR_EVPLUGINS_CONFIG/pipeline_basic.json "Stellar NAI" "Basic NAI pipeline configuration" https://raw.githubusercontent.com/data61/stellar-evaluation-plugins/devel/config/pipeline_basic.json    
 }
 
 setup_db() {
@@ -253,10 +264,19 @@ setup_search() {
 
 }
 
+# As first step: test that the base mountpoint is accessible.
+setup_main_mountpoint() {
+    info "Checking if user $STELLAR_UID:$STELLAR_GID has access to the base stellar mountpoint."
+    setup_volume "$STELLAR_VOLUMES_PREFIX" "Stellar" "base application mountpoint"
+}
+
 # Application setup: calls setup functions for all individual modules.
 setup() {
+    setup_main_mountpoint
+    setup_coordinator
     setup_db
     setup_ingest
+    setup_nai
     setup_search
 }
 

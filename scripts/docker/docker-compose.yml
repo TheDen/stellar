@@ -9,28 +9,63 @@ networks:
 
 services:
   ##############################################################################
-  # Stellar Ingest - Data ingestion module.
-  ingest:
-    image: data61/stellar-ingest:0.0.2-SNAPSHOT
-    # Example: no env var is currently used by the ingestor
-    environment:
-      - DEBUG=false
-      - SOMEVER=123
-    #entrypoint: flask initdb
-    #depends_on:
-    #  - db
+  # Stellar Coordinator - Pipeline coordination module
+
+  coordinator:
+    image: data61/stellar-coordinator:${STELLAR_COORDINATOR_VERSION}
+    # user: 474281:474281
+    user: ${STELLAR_UID}:${STELLAR_GID}
     ports:
-      - ${STELLAR_INGEST_REST_PORT}:3000
+      - ${STELLAR_COORDINATOR_REST_PORT}:8000
+      - ${STELLAR_COORDINATOR_ADMIN_PORT}:8080
     volumes:
-      - ${STELLAR_INGEST_DATAPATH}:/data/user
+      - ${STELLAR_COORDINATOR_DATAPATH}:/opt/stellar
     networks:
       - stellar-net
+    depends_on:
+      - redis
+
+  redis:
+    # image: redis:4.0.6-alpine
+    image: redis:${STELLAR_COORDINATOR_REDIS_VERSION}
+    ports:
+      - ${STELLAR_REDIS_REST_PORT}:6379
+    networks:
+      - stellar-net
+
+  ##############################################################################
+  # Stellar Ingest - Data ingestion module.
   
+  ingest:
+    image: data61/stellar-ingest:${STELLAR_INGEST_VERSION}
+    user: ${STELLAR_UID}:${STELLAR_GID}
+    # # Ingestor port only used for internal communication.
+    # ports:
+    #   - ${STELLAR_INGEST_REST_PORT}:3000
+    volumes:
+      - ${STELLAR_INGEST_DATAPATH}:/opt/stellar
+    networks:
+      - stellar-net
+
+  ##############################################################################
+  # Node attribute inference (in evaluation plugins)
+
+  nai:
+    image: data61/stellar-evaluation-plugins:${STELLAR_EVPLUGINS_VERSION}
+    user: ${STELLAR_UID}:${STELLAR_GID}
+    # # Evaluation plugins port only used for internal communication.
+    # ports:
+    #   - ${STELLAR_EVPLUGINS_REST_PORT}:5000
+    volumes:
+      - ${STELLAR_EVPLUGINS_DATAPATH}:/opt/stellar
+    networks:
+      - stellar-net
+
   ##############################################################################
   # Stellar Search - Search module.
 
   search:
-    image: data61/stellar-search:0.0.1-SNAPSHOT
+    image: data61/stellar-search:${STELLAR_SEARCH_VERSION}
     command:
       - "--spring.profiles.active=docker"
       - "--spring.config.location=/etc/stellar-search/"
@@ -70,7 +105,7 @@ services:
       - stellar-net
 
   db:
-    image: postgres:alpine
+    image: postgres:${STELLAR_SEARCH_POSTGRES_VERSION}
     volumes:
       - ${STELLAR_DB_INITSCRIPTS}/:/docker-entrypoint-initdb.d/:ro
     restart: always
@@ -112,3 +147,15 @@ services:
       - stellar-net
     depends_on:
       - elasticsearch
+
+  ##############################################################################
+  # Stellar Config - Configuration UI.
+
+  config:
+    image: data61/stellar-config:${STELLAR_CONFIG_VERSION}
+    depends_on:
+      - redis
+    ports:
+      - ${STELLAR_CONFIG_PORT}:6161
+    networks:
+      - stellar-net
