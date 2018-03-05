@@ -241,14 +241,16 @@ setup_search() {
     setup_volume "$STELLAR_SEARCH_DATAPATH" "Stellar Search" "user data directory"
     setup_volume "$STELLAR_SEARCH_APP_CONFIG" "Stellar Search" "Application config directory"
     setup_volume "$STELLAR_SEARCH_ELASTIC_CONFIG" "Stellar Search" "Elasticsearch config directory"
+    setup_volume "$STELLAR_SEARCH_KIBANA_CONFIG" "Stellar Search" "Kibana config directory"
 
     stellar_search_config > "${STELLAR_SEARCH_APP_CONFIG}/application-docker.yml"
     stellar_search_db_config > "${STELLAR_DB_INITSCRIPTS}/30-stellar-search.sql"
+    stellar_search_kibana_config > "${STELLAR_SEARCH_KIBANA_CONFIG}/kibana.yml"
+    stellar_search_elasticsearch_config > "${STELLAR_SEARCH_ELASTIC_CONFIG}/elasticsearch.yml"
 
     chmod 600 "${STELLAR_SEARCH_APP_CONFIG}/application-docker.yml"
     chmod 600 "${STELLAR_DB_INITSCRIPTS}/30-stellar-search.sql"
 
-    get_webfile $STELLAR_SEARCH_ELASTIC_CONFIG/elasticsearch.yml "Stellar Search" "Elasticsearch configuration"  https://raw.githubusercontent.com/data61/stellar-search/develop/docker/elasticsearch/config/elasticsearch.yml
 }
 
 # Application setup: calls setup functions for all individual modules.

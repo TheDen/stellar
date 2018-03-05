@@ -36,7 +36,7 @@ services:
       - "--spring.config.location=/etc/stellar-search/"
     volumes:
       - ${STELLAR_SEARCH_APP_CONFIG}/:/etc/stellar-search/:ro
-      - ${STELLAR_SEARCH_DATAPATH}:/data/user
+      - ${STELLAR_SEARCH_DATAPATH}:/data/user:ro
     ports:
       - ${STELLAR_SEARCH_REST_PORT}:8080
     depends_on:
@@ -58,8 +58,10 @@ services:
     healthcheck:
       # yellow (under replicated - which can happen for single node) and green status is considered healthy
       test:
-        - "CMD-SHELL"
-        - "curl -fs 'http://localhost:9200/_cluster/health?wait_for_status=yellow&timeout=60s&filter_path=status' | grep -qE '(green|yellow)' || exit 1"
+        - CMD-SHELL
+        - >
+          curl -fs 'http://localhost:9200/_cluster/health?wait_for_status=yellow&timeout=60s&filter_path=status' |
+          grep -qE '(green|yellow)' || exit 1
       interval: 1m
       timeout: 60s
       retries: 3
@@ -87,3 +89,26 @@ services:
       start_period: 30s
     networks:
       - stellar-net
+
+  kibana:
+    image: docker.elastic.co/kibana/kibana-oss:${STELLAR_SEARCH_ELASTIC_VERSION}
+    volumes:
+      - ${STELLAR_SEARCH_KIBANA_CONFIG}/kibana.yml:/usr/share/kibana/config/kibana.yml:ro
+    ports:
+      - "5601:5601"
+    healthcheck:
+      test:
+        # jq is not installed, use a one liner python instead for json parsing
+        - CMD-SHELL
+        - >
+          curl -fs localhost:5601/api/status |
+          python -c 'import json,sys;print(json.load(sys.stdin)["status"]["overall"]["state"])' |
+          grep  -qE green || false
+      interval: 1m
+      timeout: 60s
+      retries: 3
+      start_period: 30s
+    networks:
+      - stellar-net
+    depends_on:
+      - elasticsearch

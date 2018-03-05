@@ -38,3 +38,23 @@ GRANT ALL PRIVILEGES ON DATABASE "${STELLAR_SEARCH_DB_NAME}" TO "${STELLAR_SEARC
 EOF
 
 }
+
+stellar_search_kibana_config() {
+    cat <<EOF
+---
+server.name: kibana
+server.host: "0"
+elasticsearch.url: http://elasticsearch:9200
+EOF
+}
+
+stellar_search_elasticsearch_config() {
+    cat <<EOF
+---
+cluster.name: "docker-cluster"
+network.host: 0.0.0.0
+discovery.zen.minimum_master_nodes: 1
+discovery.type: single-node
+bootstrap.memory_lock: true
+EOF
+}
