@@ -1,0 +1,48 @@
+{ 
+ "pipeline": 
+ {
+ 	"plugins": ["representation", "data splitter", "metric", "inference"],
+ 	"parameters": 
+ 	{
+ 		"data splitter":
+ 		{
+ 			"name": "data splitter",
+ 		 	"server": "http://nai:5000/node_splitter/", 
+ 			"ext": ".lab", 
+ 			"msg": "SUCCESS", 
+ 			"debug str": "Data Splitting"
+ 		},
+ 		"representation": 
+ 		{
+ 			"name": "representation",
+ 			"server": "http://nai:5000/representation_learning/", 
+ 			"ext": "_edgelist.txt", 
+ 			"msg": "SUCCESS", 
+ 			"debug str": "Representation Learning"
+ 		},
+ 		"metric":
+ 		{
+ 			"name": "metric learning",
+ 			"server" : "http://nai:5000/metric_learning/",
+ 			"ext": ".emb",
+ 			"msg": "SUCCESS",
+ 			"debug str": "Metric Learning"
+ 		},
+ 		"inference": 
+ 		{
+ 			"name": "inference",
+ 			"server": "http://nai:5000/inference/",
+ 			"ext": "",
+ 			"msg": "SUCCESS",
+ 			"debug str": "Inference"
+ 		}
+ 	}
+ },
+ "parameters": 
+ {
+ 	"data splitter": {"target_attribute": ["subject"], "node_type":["paper"], "num_samples_per_class": [20], "test_size": [1000]},
+ 	"inference": {"method": ["logistic"]},
+ 	"metric": {"dim": [8], "metric": ["lfda"], "with_pca": [true], "dim": [8], "pca_dim": [16]}, 
+ 	"representation": {"q": [1.0], "p": [1.0]}
+ }
+}

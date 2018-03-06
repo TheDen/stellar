@@ -129,10 +129,9 @@ debug() {
 # defaults
 colour=auto
 
-# There are several ways to parse cmdline args (e.g. GNU getopt (not portable)
-# vs BSD (OSX) getopt vs getopts) - all shit. This solution is both portable,
-# allows for both short/long options, handles whitespace, handles
-# optional-option arguments ;), handles repeatable opt, and frankly doesn't
+# There  are several  ways to  parse cmdline  args. This  solution is  portable,
+# allows   for   both   short/long    options,   handles   whitespace,   handles
+# optional-option  arguments ;),  handles  repeatable opt,  and frankly  doesn't
 # require much code bloat compared with any alternatives I've seen
 
 # Examples valid option formats
@@ -172,7 +171,7 @@ while getopts "$optspec" optchar; do
                 verbose)
                     verbose=1 ;;
                 no-pull)
-                    no_pull=1 ;;    
+                    no_pull=1 ;;
                 color|colour)
                     colour=auto ;;
                 color=*|colour=*) next_arg
@@ -236,7 +235,9 @@ setup_nai() {
     setup_volume "$STELLAR_EVPLUGINS_DATAPATH"  "Stellar NAI" "working directory"
     setup_volume "$STELLAR_EVPLUGINS_CONFIG"  "Stellar NAI" "config directory"
 
-    get_webfile $STELLAR_EVPLUGINS_CONFIG/pipeline_basic.json "Stellar NAI" "Basic NAI pipeline configuration" https://raw.githubusercontent.com/data61/stellar-evaluation-plugins/devel/config/pipeline_basic.json    
+    info "Copying NAI pipeline configuration files."
+    cp ${SCRIPTPATH}/nai/*.json "$STELLAR_EVPLUGINS_CONFIG" ||
+        fatal "Cannot copy NAI pipeline configuration files."
 }
 
 setup_db() {
@@ -324,7 +325,7 @@ if [[ "$#" -ne 1 ]]; then
     fatal "Expected only 1 argument" "See '${prog_name} --help' for usage"
 fi
 
-case "$1" in 
+case "$1" in
     start)   setup; startme ;;
     stop)    stopme ;;
     restart) stopme; startme ;;
