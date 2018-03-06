@@ -40,8 +40,8 @@ services:
     image: data61/stellar-ingest:${STELLAR_INGEST_VERSION}
     user: ${STELLAR_UID}:${STELLAR_GID}
     # # Ingestor port only used for internal communication.
-    # ports:
-    #   - ${STELLAR_INGEST_REST_PORT}:3000
+    #ports:
+    #  - ${STELLAR_INGEST_REST_PORT}:3000
     volumes:
       - ${STELLAR_INGEST_DATAPATH}:/opt/stellar
     networks:
@@ -155,7 +155,26 @@ services:
     image: data61/stellar-config:${STELLAR_CONFIG_VERSION}
     depends_on:
       - redis
+    volumes:
+      - ${STELLAR_CONFIG_DATAPATH}:/opt/stellar
     ports:
       - ${STELLAR_CONFIG_PORT}:6161
     networks:
       - stellar-net
+
+  ##############################################################################
+  # ER
+
+  er:
+    image: data61/stellar-erbaseline:${STELLAR_ER_VERSION}
+    user: ${STELLAR_UID}:${STELLAR_GID}
+    volumes:
+      # TODO: must create /opt/stellar/er for ER logs.
+      - ${STELLAR_ER_DATAPATH}:/opt/stellar
+      - ${STELLAR_ER_LOGPATH}:/var/log
+    ports:
+      - ${STELLAR_ER_PORT}:7000
+    networks:
+      - stellar-net
+
+

@@ -265,6 +265,19 @@ setup_search() {
 
 }
 
+# All setup tasks needed by Stellar Config UI
+setup_config() {
+    setup_volume "$STELLAR_CONFIG_DATAPATH"  "Stellar Config" "downloads directory"
+}
+
+# All setup tasks needed by Stellar Entity Resolution
+setup_er() {
+    setup_volume "$STELLAR_ER_DATAPATH"  "Stellar ER" "working directory"
+    # Mounting the  logging directory is  a hack: otherwise /var/log  inside the
+    # container is used, which is not accessible to a non-root user.
+    setup_volume "$STELLAR_ER_LOGPATH"  "Stellar ER" "logging directory"
+}
+
 # As first step: test that the base mountpoint is accessible.
 setup_main_mountpoint() {
     info "Checking if user $STELLAR_UID:$STELLAR_GID has access to the base stellar mountpoint."
@@ -279,6 +292,8 @@ setup() {
     setup_ingest
     setup_nai
     setup_search
+    setup_er
+    setup_config
 }
 
 startme() {
