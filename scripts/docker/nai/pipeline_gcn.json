@@ -25,6 +25,6 @@
  "parameters": 
  {
  	"data splitter": {"node_type": [], "target_attribute": [], "num_samples_per_class": [20], "test_size": [1000]},
- 	"gcn": {"target_attribute": [], "attributes_to_ignore": [], "featureless": ["False"], "epochs": [300], "directed" : ["False"], "early_stopping": [10], "dropout": [0.5], "hidden1": [16]}
+ 	"gcn": {"target_attribute": [], "attributes_to_ignore": [], "featureless": ["True"], "epochs": [300], "directed" : ["False"], "early_stopping": [10], "dropout": [0.5], "hidden1": [16]}
  }
 }
