@@ -71,7 +71,7 @@ services:
       - "--spring.config.location=/etc/stellar-search/"
     volumes:
       - ${STELLAR_SEARCH_APP_CONFIG}/:/etc/stellar-search/:ro
-      - ${STELLAR_SEARCH_DATAPATH}:/data/user:ro
+      - ${STELLAR_SEARCH_DATAPATH}:/opt/stellar:ro
     ports:
       - ${STELLAR_SEARCH_REST_PORT}:8080
     depends_on:
