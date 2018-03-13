@@ -42,6 +42,14 @@ services:
     # # Ingestor port only used for internal communication.
     #ports:
     #  - ${STELLAR_INGEST_REST_PORT}:3000
+    environment:
+      JAVA_OPTS: "-Xms2g -Xmx16g"
+    healthcheck:
+      test: curl -fs 'http://localhost:3000/util'
+      start_period: 1m
+      interval: 1m
+      timeout: 15s
+      retries: 3
     volumes:
       - ${STELLAR_INGEST_DATAPATH}:/opt/stellar
       - ${STELLAR_INGEST_USERPATH}:/opt/stellar/data
