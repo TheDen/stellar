@@ -228,7 +228,8 @@ setup_coordinator() {
 
 # All setup tasks needed by Stellar Ingest
 setup_ingest() {
-    setup_volume "$STELLAR_INGEST_DATAPATH" "Stellar Ingest" "user data directory"
+    setup_volume "$STELLAR_INGEST_DATAPATH" "Stellar Ingest" "working directory"
+    setup_volume "$STELLAR_INGEST_USERPATH" "Stellar Ingest" "user data directory"
 }
 
 setup_nai() {

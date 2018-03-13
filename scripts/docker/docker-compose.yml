@@ -44,6 +44,7 @@ services:
     #  - ${STELLAR_INGEST_REST_PORT}:3000
     volumes:
       - ${STELLAR_INGEST_DATAPATH}:/opt/stellar
+      - ${STELLAR_INGEST_USERPATH}:/opt/stellar/data
     networks:
       - stellar-net
 
