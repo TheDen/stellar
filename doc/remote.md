@@ -9,7 +9,7 @@ gain browser access to the UI and Python notebook.
 When working on a remote client machine, connecting to the Stellar server through 
 a web browser installed on the client is the recommended procedure.
 
-To make  the connection  possible, together  with a web  browser, a  software to
+To make  the connection  possible, together  with a web  browser, software to
 create encrypted SSH _tunnels_ (also known  as _port forwarding_) is required on
 the client machine. 
 
