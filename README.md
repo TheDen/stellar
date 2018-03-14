@@ -32,9 +32,9 @@ This repository is the prototype release for the Stellar platform. The current l
 * No missing values for machine learning
 * Fixed datasets for entity resolution
 * Web UI focused only on integration
-* Data Visualisation in Gephi
+* For Data Visualisation you will need to install [Gephi](https://gephi.org)
 
-## Running
+## Modules
 
 Stellar is a collection of Docker containers coordinated with Apache Nifi. The collection of docker containers are built from the following repositories:
 
@@ -48,13 +48,14 @@ Stellar is a collection of Docker containers coordinated with Apache Nifi. The c
 
 This GitHub repository uses Docker Compose to download and launch the Docker containers. The containers are downloaded from DockerHub in the [Data61 repository](https://hub.docker.com/r/data61).
 
-### Server Install
+### Install
+Stellar runs as a server application, and the user connects to the server through the Web UI or the Python Client.
 
-To install Stellar, first install the backend server as described [here](./doc/server.md). To run Stellar locally on the server machine, you can then use Stellar through the Python client or Web UI as described [here](./doc/client.md). Alternatively you can connect remotely to the machine and use a local client, as described [here](./doc/remote.md)
+To connect remotely to a Stellar server instance follow these [instructions](./doc/remote.md)
 
-### AWS
-A reference server exists on AWS with a pre-configured Stellar installation. Documentation for the reference AWS install is available
-[here](./doc/aws.md)
+If you would like to install and run the Stellar server manually, a server machine is required that fulfills the following [specifications](./doc/server.md).
+
+A reference installation procedure is defined on AWS EC2 instances. Documentation for the reference AWS install is available [here](./doc/aws.md).
 
 ## License
 
