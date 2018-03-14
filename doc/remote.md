@@ -16,7 +16,7 @@ the client machine.
 The general procedure is therefore:
 
 1. Build  a tunnel connection  to the server,  forwarding ports 6161  (main UI),
-   7777 (file sharing), 8888 (Python notebook) and 3010 (Search UI). For Windows, this is described [here](./remote.md#connecting-from-windows)
+   7777 (file sharing), 8888 (Python notebook) and 3010 (Search UI). For Windows, this is described [here](./remote.md#connecting-from-windows). For macOS or Linux, this is described [here](./remote.md#connecting-to-macos-or-linux).
 2. Start the local browser and open the following links in separate tabs:
   * [Web UI](http://127.0.0.1:6161)
   * [File transfer - if installed](http://127.0.0.1:7777)
