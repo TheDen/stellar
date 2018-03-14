@@ -228,7 +228,8 @@ setup_coordinator() {
 
 # All setup tasks needed by Stellar Ingest
 setup_ingest() {
-    setup_volume "$STELLAR_INGEST_DATAPATH" "Stellar Ingest" "user data directory"
+    setup_volume "$STELLAR_INGEST_DATAPATH" "Stellar Ingest" "working directory"
+    setup_volume "$STELLAR_INGEST_USERPATH" "Stellar Ingest" "user data directory"
 }
 
 setup_nai() {
@@ -260,9 +261,8 @@ setup_search() {
     stellar_search_kibana_config > "${STELLAR_SEARCH_KIBANA_CONFIG}/kibana.yml"
     stellar_search_elasticsearch_config > "${STELLAR_SEARCH_ELASTIC_CONFIG}/elasticsearch.yml"
 
-    chmod 600 "${STELLAR_SEARCH_APP_CONFIG}/application-docker.yml"
-    chmod 600 "${STELLAR_DB_INITSCRIPTS}/30-stellar-search.sql"
-
+    # chmod 600 "${STELLAR_SEARCH_APP_CONFIG}/application-docker.yml"
+    # chmod 600 "${STELLAR_DB_INITSCRIPTS}/30-stellar-search.sql"
 }
 
 # All setup tasks needed by Stellar Config UI

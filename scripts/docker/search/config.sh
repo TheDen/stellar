@@ -7,7 +7,7 @@ stellar_search_config() {
 ---
 logging:
   level:
-    au.com.d2dcrc: DEBUG
+    au.csiro.data61.stellar: DEBUG
 
 spring:
 
