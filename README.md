@@ -51,11 +51,9 @@ This GitHub repository uses Docker Compose to download and launch the Docker con
 ### Install
 Stellar runs as a server application, and the user connects to the server through the Web UI or the Python Client.
 
-To connect remotely to a Stellar server instance follow these [instructions](./doc/remote.md)
+To connect remotely to a Stellar server instance follow these [instructions](./doc/remote.md).
 
-If you would like to install and run the Stellar server manually, a server machine is required that fulfills the following [specifications](./doc/server.md).
-
-A reference installation procedure is defined on AWS EC2 instances. Documentation for the reference AWS install is available [here](./doc/aws.md).
+If you would like to install and run the Stellar server manually, you will need to follow the specifications and instructions as specified [here](./doc/server.md).
 
 ## License
 
