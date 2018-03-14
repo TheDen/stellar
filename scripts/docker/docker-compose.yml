@@ -1,0 +1,189 @@
+################################################################################
+# Stellar - Machine Learning on Graphs
+
+version: '3.4'
+
+networks:
+  stellar-net:
+    driver: bridge
+
+services:
+  ##############################################################################
+  # Stellar Coordinator - Pipeline coordination module
+
+  coordinator:
+    image: data61/stellar-coordinator:${STELLAR_COORDINATOR_VERSION}
+    # user: 474281:474281
+    user: ${STELLAR_UID}:${STELLAR_GID}
+    ports:
+      - ${STELLAR_COORDINATOR_REST_PORT}:8000
+      - ${STELLAR_COORDINATOR_ADMIN_PORT}:8080
+    volumes:
+      - ${STELLAR_COORDINATOR_DATAPATH}:/opt/stellar
+    networks:
+      - stellar-net
+    depends_on:
+      - redis
+
+  redis:
+    # image: redis:4.0.6-alpine
+    image: redis:${STELLAR_COORDINATOR_REDIS_VERSION}
+    ports:
+      - ${STELLAR_REDIS_REST_PORT}:6379
+    networks:
+      - stellar-net
+
+  ##############################################################################
+  # Stellar Ingest - Data ingestion module.
+  
+  ingest:
+    image: data61/stellar-ingest:${STELLAR_INGEST_VERSION}
+    user: ${STELLAR_UID}:${STELLAR_GID}
+    # # Ingestor port only used for internal communication.
+    #ports:
+    #  - ${STELLAR_INGEST_REST_PORT}:3000
+    environment:
+      JAVA_OPTS: "-Xms2g -Xmx16g"
+    healthcheck:
+      test: curl -fs 'http://localhost:3000/util'
+      start_period: 1m
+      interval: 1m
+      timeout: 15s
+      retries: 3
+    volumes:
+      - ${STELLAR_INGEST_DATAPATH}:/opt/stellar
+      - ${STELLAR_INGEST_USERPATH}:/opt/stellar/data
+    networks:
+      - stellar-net
+
+  ##############################################################################
+  # Node attribute inference (in evaluation plugins)
+
+  nai:
+    image: data61/stellar-evaluation-plugins:${STELLAR_EVPLUGINS_VERSION}
+    user: ${STELLAR_UID}:${STELLAR_GID}
+    # # Evaluation plugins port only used for internal communication.
+    # ports:
+    #   - ${STELLAR_EVPLUGINS_REST_PORT}:5000
+    volumes:
+      - ${STELLAR_EVPLUGINS_DATAPATH}:/opt/stellar
+    networks:
+      - stellar-net
+
+  ##############################################################################
+  # Stellar Search - Search module.
+
+  search:
+    image: data61/stellar-search:${STELLAR_SEARCH_VERSION}
+    command:
+      - "--spring.profiles.active=docker"
+      - "--spring.config.location=/etc/stellar-search/"
+    volumes:
+      - ${STELLAR_SEARCH_APP_CONFIG}/:/etc/stellar-search/:ro
+      - ${STELLAR_SEARCH_DATAPATH}:/opt/stellar:ro
+    ports:
+      - ${STELLAR_SEARCH_REST_PORT}:8080
+    depends_on:
+      - elasticsearch
+      - db
+    networks:
+      - stellar-net
+
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch-oss:${STELLAR_SEARCH_ELASTIC_VERSION}
+    volumes:
+      - ${STELLAR_SEARCH_ELASTIC_CONFIG}/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml:ro
+    environment:
+      ES_JAVA_OPTS: "-Xmx256m -Xms256m"
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    healthcheck:
+      # yellow (under replicated - which can happen for single node) and green status is considered healthy
+      test:
+        - CMD-SHELL
+        - >
+          curl -fs 'http://localhost:9200/_cluster/health?wait_for_status=yellow&timeout=60s&filter_path=status' |
+          grep -qE '(green|yellow)' || exit 1
+      interval: 1m
+      timeout: 60s
+      retries: 3
+      start_period: 30s
+    networks:
+      - stellar-net
+
+  db:
+    image: postgres:${STELLAR_SEARCH_POSTGRES_VERSION}
+    volumes:
+      - ${STELLAR_DB_INITSCRIPTS}/:/docker-entrypoint-initdb.d/:ro
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: ${STELLAR_DB_PASSWORD} # only for the super user account
+      # Don't define POSTGRES_USER, POSTGRES_DB, since multiple modules may want their own
+      # DB and user. Instead define per-module roles in /docker-entrypoint-initdb.d/
+      # See docker image doco https://hub.docker.com/_/postgres/
+    healthcheck:
+      test:
+        - "CMD-SHELL"
+        - 'pg_isready --username "$${POSTGRES_USER}" --dbname "$${POSTGRES_DB}" || exit 1'
+      interval: 1m
+      timeout: 60s
+      retries: 3
+      start_period: 30s
+    networks:
+      - stellar-net
+
+  kibana:
+    image: docker.elastic.co/kibana/kibana-oss:${STELLAR_SEARCH_ELASTIC_VERSION}
+    volumes:
+      - ${STELLAR_SEARCH_KIBANA_CONFIG}/kibana.yml:/usr/share/kibana/config/kibana.yml:ro
+    ports:
+      - "5601:5601"
+    healthcheck:
+      test:
+        # jq is not installed, use a one liner python instead for json parsing
+        - CMD-SHELL
+        - >
+          curl -fs localhost:5601/api/status |
+          python -c 'import json,sys;print(json.load(sys.stdin)["status"]["overall"]["state"])' |
+          grep  -qE green || false
+      interval: 1m
+      timeout: 60s
+      retries: 3
+      start_period: 30s
+    networks:
+      - stellar-net
+    depends_on:
+      - elasticsearch
+
+  ##############################################################################
+  # Stellar Config - Configuration UI.
+
+  config:
+    image: data61/stellar-config:${STELLAR_CONFIG_VERSION}
+    depends_on:
+      - redis
+    volumes:
+      - ${STELLAR_CONFIG_DATAPATH}:/opt/stellar
+    ports:
+      - ${STELLAR_CONFIG_PORT}:6161
+    networks:
+      - stellar-net
+
+  ##############################################################################
+  # ER
+
+  er:
+    image: data61/stellar-erbaseline:${STELLAR_ER_VERSION}
+    user: ${STELLAR_UID}:${STELLAR_GID}
+    volumes:
+      # TODO: must create /opt/stellar/er for ER logs.
+      - ${STELLAR_ER_DATAPATH}:/opt/stellar
+      - ${STELLAR_ER_LOGPATH}:/var/log
+    ports:
+      - ${STELLAR_ER_PORT}:7000
+    networks:
+      - stellar-net
+
+

@@ -1,0 +1,30 @@
+{ 
+ "pipeline": 
+ {
+ 	"plugins": ["data splitter", "gcn"],
+ 	"parameters": 
+ 	{
+ 		"data splitter":
+ 		{
+ 			"name": "data splitter",
+ 		 	"server": "http://nai:5000/node_splitter/", 
+ 			"ext": "", 
+ 			"msg": "SUCCESS", 
+ 			"debug str": "Data Splitting"
+ 		},
+ 		"gcn":
+ 		{
+ 			"name": "gcn",
+ 		 	"server": "http://nai:5000/gcn/", 
+ 			"ext": "", 
+ 			"msg": "SUCCESS", 
+ 			"debug str": "GCN"
+ 		}
+ 	}
+ },
+ "parameters": 
+ {
+ 	"data splitter": {"node_type": [], "target_attribute": [], "num_samples_per_class": [20], "test_size": [1000]},
+ 	"gcn": {"target_attribute": [], "attributes_to_ignore": [], "featureless": ["True"], "epochs": [300], "directed" : ["False"], "early_stopping": [10], "dropout": [0.5], "hidden1": [16]}
+ }
+}

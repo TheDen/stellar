@@ -1,0 +1,39 @@
+{ 
+ "pipeline": 
+ {
+ 	"plugins": ["representation", "data splitter", "inference"],
+ 	"parameters": 
+ 	{
+ 		"data splitter":
+ 		{
+ 			"name": "data splitter",
+ 		 	"server": "http://nai:5000/node_splitter/", 
+ 			"ext": ".lab", 
+ 			"msg": "SUCCESS", 
+ 			"debug str": "Data Splitting"
+ 		},
+ 		"representation": 
+ 		{
+ 			"name": "representation",
+ 			"server": "http://nai:5000/representation_learning/", 
+ 			"ext": "_edgelist.txt", 
+ 			"msg": "SUCCESS", 
+ 			"debug str": "Representation Learning"
+ 		},
+ 		"inference": 
+ 		{
+ 			"name": "inference",
+ 			"server": "http://nai:5000/inference/",
+ 			"ext": ".emb",
+ 			"msg": "SUCCESS",
+ 			"debug str": "Inference"
+ 		}
+ 	}
+ },
+ "parameters": 
+ {
+ 	"data splitter": {"target_attribute": [], "node_type":[], "num_samples_per_class": [20], "test_size": [1000]},
+ 	"inference": {"method": ["logistic"]}, 
+ 	"representation": {"q": [1.0], "p": [1.0]}
+ }
+}
