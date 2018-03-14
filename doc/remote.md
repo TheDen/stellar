@@ -37,7 +37,7 @@ This procedure was tested, and is guaranteed to work, only on the following syst
 
 ### Additional software
 
-The abovementioned is sufficient for importing data into Stellar, triggering the
+The software packages above are sufficient for importing data into Stellar, triggering the
 graph analytics pipeline and retrieving the results.  To visualize the output of
 certain operations a client application capable of displaying
 [GDF](https://gephi.org/users/supported-graph-formats/gdf-format/) and
