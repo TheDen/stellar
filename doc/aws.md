@@ -298,4 +298,4 @@ scp -i stellar.pem stellar@<EC2IP>:my-example.csv /opt/stellar/data
 
 ### Connect to Stellar
 
-To use _Stellar_ UI or the python notebook follow the [client instructions](client.md).
+To use _Stellar_ UI or the python notebook follow the instructions [here](./remote.md#connecting-with-a-web-browser).
