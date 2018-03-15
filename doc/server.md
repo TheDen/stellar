@@ -20,8 +20,8 @@ machine__ is supported.
 The server machine must fulfill these __minimal hardware requirements__:
 
 - A  fairly recent _Intel_  64 bit  server-class CPU, e.g.  Xeon E7 v3,  4 cores
-  (reccommended Xeon E7 v4, 8 cores)
-- 16 GB of RAM (32+ GB reccommended)
+  (recommended Xeon E7 v4, 8 cores)
+- 16 GB of RAM (32+ GB recommended)
 
 These requirements are typically sufficient  to run graph fulfilling the current
 data specifications (50000 nodes).
@@ -34,7 +34,7 @@ connection between server and clients is required, such as _Gigabit Ethernet_.
 
 To install or upgrade _Stellar_ modules from their online repositories ([Data61
 DockerHub](https://hub.docker.com/r/data61/) and [Data61
-GitHub](https://github.com/data61)) an Internet connection is required duuring
+GitHub](https://github.com/data61)) an Internet connection is required during
 the installation.
 
 ### Software requirements
@@ -45,7 +45,7 @@ The server machine must be __equipped with the following base software__:
 - _Docker_ engine version 17.12.1-ce (or a later, compatible version)
 - Docker orchestration  system  _docker-compose_ version  1.18.0  (or a  later,
   compatible version)
-- Jupyther/iPython
+- Jupyter/iPython
 
 It is responsibility of the users to provide suitable installations of the above
 listed packages, in  compliance with their IT policies.
