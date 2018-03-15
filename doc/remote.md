@@ -115,7 +115,7 @@ __Note:__ 4 ports must be forwarded, but only 3 are visible in the screenshot be
    ```
    If you would like to change the port to map to, the syntax for the ssh command is `[local-port]:localhost:[remote-port]`
 
-5. Open the browser on your **local** machine and use the pages as described [here](./remote.md#connecting-with-a-web-browser)
+5. Open the browser on your **local** machine and use the pages as described [above](./remote.md#connecting-with-a-web-browser)
 
 6. To inspect the Stellar logs on the **remote** machine, run the following command
    ```bash
