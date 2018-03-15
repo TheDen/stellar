@@ -224,6 +224,11 @@ get_webfile()  {
 
 setup_coordinator() {
     setup_volume "$STELLAR_COORDINATOR_DATAPATH" "Stellar Coordinator" "working directory"
+    oss=$(ls -d "$STELLAR_COORDINATOR_DATAPATH/session/"* 2> /dev/null |grep -E '/.{8}-.{4}-.{4}-.{4}-.{12}$')
+    info "Found $(echo $oss|wc -w) expired sessions to remove."
+    for s in $oss; do
+        rm -rf $s;
+    done
 }
 
 # All setup tasks needed by Stellar Ingest
