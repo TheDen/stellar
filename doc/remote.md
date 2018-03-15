@@ -99,28 +99,28 @@ __Note:__ 4 ports must be forwarded, but only 3 are visible in the screenshot be
 1. Open a terminal.
 
 2. Ensure that your _.pem_ file is private with the correct permissions
-```bash
-chmod 400 ~/keys/stellar-demos.pem
-```
+   ```bash
+   chmod 400 ~/keys/stellar-demos.pem
+   ```
 
 3. Use the **ssh** command to connect to the remote machine.
-```bash
-ssh -i ~/keys/stellar-demos.pem ubuntu@REMOTE_IP_ADDRESS
-```
+   ```bash
+   ssh -i ~/keys/stellar-demos.pem ubuntu@REMOTE_IP_ADDRESS
+   ```
 
 4. In a new shell, on the **local** machine, forward the ports 6161, 7777, 8888 and 3010.
-```bash
-ssh -N -i ~/keys/stellar-demos.pem -L 8888:localhost:8888 -L 6161:localhost:6161 -L 7777:localhost:7777 -L 3010:localhost:3010 ubuntu@REMOTE_IP_ADDRESS
-```
-If you would like to change the port to map to, the syntax for the ssh command is `[local-port]:localhost:[remote-port]`
+   ```bash
+   ssh -N -i ~/keys/stellar-demos.pem -L 8888:localhost:8888 -L 6161:localhost:6161 -L 7777:localhost:7777 -L 3010:localhost:3010   ubuntu@REMOTE_IP_ADDRESS
+   ```
+   If you would like to change the port to map to, the syntax for the ssh command is `[local-port]:localhost:[remote-port]`
 
 5. Open the browser on your **local** machine and use the pages as described [here](./remote.md#connecting-with-a-web-browser)
 
 6. To inspect the Stellar logs on the **remote** machine, run the following command
-```bash
-docker logs --follow DOCKER_CONTAINER_NAME
-```
-where `DOCKER_CONTAINER_NAME` is the name of one of the running containers. A list of running containers can be shown with the command
-```bash
-docker ps
-```
+   ```bash
+   docker logs --follow DOCKER_CONTAINER_NAME
+   ```
+   where `DOCKER_CONTAINER_NAME` is the name of one of the running containers. A list of running containers can be shown with the command
+   ```bash
+   docker ps
+   ```
