@@ -6,17 +6,17 @@ gain browser access to the UI and Python notebook.
 
 ## Connecting with a web browser
 
-When working on a remote client machine, connecting to the Stellar server through 
+When working on a remote client machine, connecting to the Stellar server through
 a web browser installed on the client is the recommended procedure.
 
 To make  the connection  possible, together  with a web  browser, software to
 create encrypted SSH _tunnels_ (also known  as _port forwarding_) is required on
-the client machine. 
+the client machine.
 
 The general procedure is therefore:
 
 1. Build  a tunnel connection  to the server,  forwarding ports 6161  (main UI),
-   7777 (file sharing), 8888 (Python notebook) and 3010 (Search UI). For Windows, this is described [here](./remote.md#connecting-from-windows). For macOS or Linux, this is described [here](./remote.md#connecting-to-macos-or-linux).
+   7777 (file sharing), 8888 (Python notebook) and 3010 (Search UI). For Windows, this is described [here](./remote.md#connecting-from-windows). For macOS or Linux, this is described [here](./remote.md#connecting-from-macos-or-linux).
 2. Start the local browser and open the following links in separate tabs:
   * [Web UI](http://127.0.0.1:6161)
   * [File transfer - if installed](http://127.0.0.1:7777)
@@ -47,18 +47,18 @@ required.
 The recommended  application, which has  been tested with _Stellar_  output data
 formats, is [Gephi](https://gephi.org).
 
-## Connecting from Windows 
+## Connecting from Windows
 
 Download and install PuTTY <https://www.putty.org>. You will need PuTTYgen and the PuTTY SSH client itself to connect to the remote machine.
 
 ### PuTTYgen
 
-If you have a _.pem_ file, the private key format generate by AWS EC2, you can convert it into a format that can be used by PuTTY using PuTTYgen (_.ppk_). 
+If you have a _.pem_ file, the private key format generate by AWS EC2, you can convert it into a format that can be used by PuTTY using PuTTYgen (_.ppk_).
 
 To convert your private key:
 
 1. Start PuTTYgen.
-2. Under **Type of key to generate**, choose **RSA** 
+2. Under **Type of key to generate**, choose **RSA**
 
     ![.](pics/windows-puttygen-rsa.png "PuTTYgen")
 
@@ -87,7 +87,7 @@ You can now connect to the remote machine via PuTTY.
 
 __Note:__ 4 ports must be forwarded, but only 3 are visible in the screenshot below.
 
-    ![.](pics/windows-putty-ports.png "PuTTY")
+  ![.](pics/windows-putty-ports.png "PuTTY")
 
 5. Click **Open** to connect.
 
@@ -98,11 +98,29 @@ __Note:__ 4 ports must be forwarded, but only 3 are visible in the screenshot be
 
 1. Open a terminal.
 
-2. Use the **ssh** command to connect to the remote machine.
+2. Ensure that your _.pem_ file is private with the correct permissions
+```bash
+chmod 400 ~/keys/stellar-demos.pem
+```
 
-    ![.](pics/macOS-ssh-success.png "Success")
+3. Use the **ssh** command to connect to the remote machine.
+```bash
+ssh -i ~/keys/stellar-demos.pem ubuntu@REMOTE_IP_ADDRESS
+```
 
-3. Forward ports 6161, 7777, 8888 and 3010.
+4. In a new shell, on the **local** machine, forward the ports 6161, 7777, 8888 and 3010.
+```bash
+ssh -N -i ~/keys/stellar-demos.pem -L 8888:localhost:8888 -L 6161:localhost:6161 -L 7777:localhost:7777 -L 3010:localhost:3010 ubuntu@REMOTE_IP_ADDRESS
+```
+If you would like to change the port to map to, the syntax for the ssh command is `[local-port]:localhost:[remote-port]`
 
-    ![.](pics/macOS-ssh-ports.png "Ports")
+5. Open the browser on your **local** machine and use the pages as described [here](./remote.md#connecting-with-a-web-browser)
 
+6. To inspect the Stellar logs on the **remote** machine, run the following command
+```bash
+docker logs --follow DOCKER_CONTAINER_NAME
+```
+where `DOCKER_CONTAINER_NAME` is the name of one of the running containers. A list of running containers can be shown with the command
+```bash
+docker ps
+```
