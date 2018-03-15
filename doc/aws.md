@@ -213,7 +213,7 @@ After connecting complete the following steps.
 
 ```bash
 # Install jupyter
-pip3 install --user jupyter
+pip3 install --user jupyter pandas
 
 # Get python client and install it
 wget https://github.com/data61/stellar-py/archive/v0.2.1.tar.gz
@@ -269,7 +269,7 @@ Start Jupyter. It is also recommended  to start it within a terminal multiplexer
 (like _GNU screen_), with:
 
 ```bash
-screen -dmS jupyter bash -c 'jupyter notebook --no-browser'
+screen -dmS jupyter bash -c 'jupyter notebook --no-browser ~/stellar-py-0.2.1/examples'
 ```
 
 ### Launch cloudcmd (optional)
@@ -299,3 +299,9 @@ scp -i stellar.pem stellar@<EC2IP>:my-example.csv /opt/stellar/data
 ### Connect to Stellar
 
 To use _Stellar_ UI or the python notebook follow the instructions [here](./remote.md#connecting-with-a-web-browser).
+
+__Note__: if you followed these instructions to install on a local Ubuntu workstation, instead of an AWS remote instance, you can now use that same machine as client. Just point your browser to:
+* [Web UI](http://127.0.0.1:6161)
+* [File transfer - if installed](http://127.0.0.1:7777)
+* [Python notebook](http://127.0.0.1:8888)
+* [Search UI](http://127.0.0.1:3010)
