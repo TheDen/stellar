@@ -215,6 +215,9 @@ After connecting complete the following steps.
 # Install jupyter
 pip3 install --user jupyter pandas
 
+# Useful additional packages.
+pip3 install --user numpy scikit-learn matplotlib
+
 # Get python client and install it
 wget https://github.com/data61/stellar-py/archive/v0.2.2.tar.gz
 tar xzvf v0.2.2.tar.gz
