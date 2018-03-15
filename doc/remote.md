@@ -107,6 +107,7 @@ __Note:__ 4 ports must be forwarded, but only 3 are visible in the screenshot be
    ```bash
    ssh -i ~/keys/stellar-demos.pem ubuntu@REMOTE_IP_ADDRESS
    ```
+   where `REMOTE_IP_ADDRESS` is the address of the remote machine.
 
 4. In a new shell, on the **local** machine, forward the ports 6161, 7777, 8888 and 3010.
    ```bash
