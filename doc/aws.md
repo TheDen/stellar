@@ -216,9 +216,9 @@ After connecting complete the following steps.
 pip3 install --user jupyter pandas
 
 # Get python client and install it
-wget https://github.com/data61/stellar-py/archive/v0.2.1.tar.gz
-tar xzvf v0.2.1.tar.gz
-cd stellar-py-0.2.1
+wget https://github.com/data61/stellar-py/archive/v0.2.2.tar.gz
+tar xzvf v0.2.2.tar.gz
+cd stellar-py-0.2.2
 pip3 install --user .
 ```
 
@@ -269,7 +269,7 @@ Start Jupyter. It is also recommended  to start it within a terminal multiplexer
 (like _GNU screen_), with:
 
 ```bash
-screen -dmS jupyter bash -c 'jupyter notebook --no-browser ~/stellar-py-0.2.1/examples'
+screen -dmS jupyter bash -c 'jupyter notebook --no-browser ~/stellar-py-0.2.2/examples'
 ```
 
 ### Launch cloudcmd (optional)
