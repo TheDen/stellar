@@ -1,0 +1,12 @@
+---
+conda_bootstrap:
+  version: 4.4.10
+  checksum: md5:bec6203dbb2f53011e974e9bf4d46e93
+conda_path: /usr/local/conda
+
+conda_rc:
+  channels:
+    - conda-forge
+    - r
+    - defaults
+  auto_update_conda: false

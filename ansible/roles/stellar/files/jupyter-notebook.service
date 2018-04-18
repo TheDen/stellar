@@ -1,0 +1,13 @@
+[Unit]
+Description=Jupyter Notebook
+After=network.target
+
+[Service]
+User=stellar
+Group=stellar
+WorkingDirectory=~
+ExecStart=/usr/local/conda/bin/jupyter notebook --no-browser
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target

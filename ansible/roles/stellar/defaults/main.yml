@@ -1,0 +1,15 @@
+---
+stellar_ssh_key_passphrase:
+
+stellar_py_version: 0.2.1
+stellar_dist:
+  version: 0.1.0
+  checksum: sha256:701634956289cc34b9d2e82a39fdc59ef2d062ed6af8537adb26c5886e85ee40
+
+# The default for jupyter is 'localhost' however when testing on
+# https://app.vagrantup.com/generic/boxes/rhel7, ipv6 is disabled, and together with
+# localhost in /etc/hosts resolving to 127.0.0.1, and ::1 (as it should) and this python bug
+# https://bugs.python.org/issue30945 it fails to boot with
+# OSError: [Errno 99] Cannot assign requested address
+# just set as the IPv4 loopback address
+jupyter_notebook_ip_address: 127.0.0.1

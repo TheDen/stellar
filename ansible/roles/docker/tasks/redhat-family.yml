@@ -1,0 +1,25 @@
+---
+- name: install dockers official gpg key for yum
+  rpm_key:
+    state: present
+    key: https://download-stage.docker.com/linux/centos/gpg
+
+- name: download the docker repository file
+  get_url:
+    url: https://download.docker.com/linux/centos/docker-ce.repo
+    dest: /etc/yum.repos.d/docker-ce.repo
+
+- name: enable the docker ce stable rpm repository
+  # the yum_repository module doesn't work well for modifying existing definitions
+  # see https://github.com/ansible/ansible-modules-extras/issues/2384
+  ini_file:
+    path: /etc/yum.repos.d/docker-ce.repo
+    section: docker-ce-stable
+    option: enabled
+    value: 1
+
+- name: install docker-ce
+  yum:
+    name: docker-ce
+    state: latest
+    update_cache: yes

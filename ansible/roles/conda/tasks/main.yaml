@@ -1,0 +1,48 @@
+---
+- name: get miniconda3 installation script
+  get_url:
+    url: "https://repo.continuum.io/miniconda/Miniconda3-{{ conda_bootstrap.version }}-Linux-x86_64.sh"
+    dest: "/var/tmp/Miniconda3-{{ conda_bootstrap.version }}-Linux-x86_64.sh"
+    checksum: "{{ conda_bootstrap.checksum }}"
+    mode: 0755
+
+- name: run miniconda3 installation script
+  command: /var/tmp/Miniconda3-{{ conda_bootstrap.version }}-Linux-x86_64.sh -b -f -p {{ conda_path }}
+  args:
+    creates: "{{ conda_path }}/bin/conda"
+
+- name: configure conda
+  template:
+    src: .condarc.j2
+    dest: "{{ conda_path }}/.condarc"
+
+- name: symlink conda for compatibility
+  file:
+    state: link
+    path: /usr/local/conda
+    src: "{{ conda_path }}"
+  when: conda_path != '/usr/local/conda'
+
+- name: update exectuable search path with conda
+  template:
+    src: profile.sh.j2
+    dest: /etc/profile.d/conda.sh
+
+- name: update sudoers secure_path
+  lineinfile:
+    dest: /etc/sudoers.d/50-conda
+    line: 'Defaults secure_path="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/local/conda/bin"'
+    regexp: '^Defaults secure_path='
+    validate: "visudo -cf %s"
+    create: yes
+    mode: "0440"
+
+- name: update bootstrap conda
+  conda:
+    name: "{{ item }}"
+    state: latest
+    executable: /usr/local/conda/bin/conda
+    update_dependencies: no
+  with_items:
+    - conda
+    - anaconda-client

@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+
+{{ ansible_managed | comment }}
+
+if [ -d /usr/local/conda/bin ]; then
+    # Copied from redhat's pathmunge
+    if ! echo $PATH | /bin/grep -E -q "(^|:)/usr/local/conda/bin($|:)" ; then
+        # Default to using system interpreter by appending path to end.
+        # When ready this should be changed to the other way around.
+        PATH="${PATH:+$PATH:}/usr/local/conda/bin"
+    fi
+fi

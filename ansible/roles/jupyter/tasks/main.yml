@@ -1,0 +1,9 @@
+---
+- name: install jupyter notebook
+  conda:
+    executable: "{{ conda_path }}/bin/conda"
+    name: "{{ item }}"
+    state: latest
+    update_dependencies: no
+  with_items: "{{ jupyter_conda_stack }}"
+
