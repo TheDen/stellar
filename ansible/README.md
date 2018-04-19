@@ -97,7 +97,7 @@ https://docs.ansible.com/ansible/latest/user_guide/playbooks_best_practices.html
 Usually the control machine is different from the machines that are managed in the inventory, however 
 Ansible does support non-ssh connection types such as the `local` connection type for managing the same host that
 Ansible is run from. This may be preferable to define `ansible_connection: local` if you do not have access to
-another non-Windows work station to run Ansible from and you wish instead to run anisble on the machine you wish to
+another non-Windows work station to run Ansible from and you wish instead to run ansible on the machine you wish to
 manage (not recommended).
 
 If you are provisioning on Ubuntu 16.04 LTS you will also need to set `ansible_python_interpreter: /usr/bin/python3`
@@ -126,13 +126,13 @@ rhel:
 
 And then register your Red Hat subscription with  
 ```commandline
-anisble-playbook -i inventory --ask-vault-pass redhat.yml
+ansible-playbook -i inventory --ask-vault-pass redhat.yml
 ```
 You Red Hat Administrator may have already done this for you.
 
 To run the stellar playbook, run
 ```
-anisble-playbook -i inventory [--verbose] stellar.yml 
+ansible-playbook -i inventory [--verbose] stellar.yml 
 ```
 
 This will run a sequence of tasks.
@@ -188,9 +188,9 @@ vagrant destroy
 ```
 
 You may also wish to destroy the persistence additional docker storage for the VMs at
-`ansible/vagrant-docker-storage/*.vdi` as these are not destroyed by vagrant.
+`ansible/.vagrant/docker-storage/*.vdi` as these are not destroyed by vagrant.
 
 To have Vagrant run Ansible in verbose mode, uncomment the setting `ansible.verbose = true` in the
 `Vagrantfile`.
 
-You can ssh into the vagrant boxes with `vagrant ssh vagrant-{centos|ubuntu|`
+You can ssh into the vagrant boxes with `vagrant ssh vagrant-{centos|ubuntu|rhel}`
