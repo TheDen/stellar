@@ -1,0 +1,34 @@
+---
+- hosts: all
+  become: yes
+  pre_tasks:
+    - name: enable required rhel 7 extras and optional repositories
+      rhsm_repository:
+        name: "{{ item }}"
+        state: enabled
+      with_items:
+        - rhel-7-server-extras-rpms
+        - rhel-7-server-optional-rpms
+      when: ansible_distribution | lower == 'redhat'
+
+    - block:
+        - name: add the extra packages for enterprise linux (epel) repository for centos and redhat
+          yum:
+            name: https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
+            state: present
+
+        - name: enable the extra packages for enterprise linux (epel) repository for centos and redhat
+          # the yum_repository module doesn't work well for modifying existing definitions
+          # see https://github.com/ansible/ansible-modules-extras/issues/2384
+          ini_file:
+            path: /etc/yum.repos.d/epel.repo
+            section: epel
+            option: enabled
+            value: 1
+      when: ansible_os_family | lower == 'redhat'
+
+  roles:
+    - docker
+    - conda
+    - nodejs
+    - stellar

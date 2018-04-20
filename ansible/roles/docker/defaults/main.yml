@@ -1,0 +1,4 @@
+---
+docker_compose:
+  version: 1.21.0
+  checksum: sha256:af639f5e9ca229442c8738135b5015450d56e2c1ae07c0aaa93b7da9fe09c2b0

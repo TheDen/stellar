@@ -1,0 +1,51 @@
+---
+# The variables in this file are specific to this host.
+
+# For list of behavioural inventory parameters see
+# http://docs.ansible.com/ansible/latest/user_guide/intro_inventory.html#list-of-behavioral-inventory-parameters
+# The main ones are
+
+# The managed machine's python path. For operating systems which don't have have python 2
+# installed by default (E.g. Ubuntu 16.04)
+ansible_python_interpreter: /usr/bin/python3
+
+# The name of the host to connect to, if different from the alias you wish to give to it
+# This can be an IP address. This is handy if a DNS entry does not exist for the alias.
+ansible_host: "192.168.100.1"
+
+# SSH port to use, if not the default 22
+ansible_port: 2222
+
+# The default ssh user name to use.
+ansible_user: ubuntu
+
+# Connection type to the host. This can be the name of any of ansible’s connection plugins.
+# SSH protocol types are 'smart', 'ssh' or 'paramiko'. The default is smart.
+# Non-SSH based types: 'local', 'docker'
+ansible_connection: local
+
+# Private key file used by ssh. Useful if using multiple keys and you don’t want to use SSH agent.
+ansible_ssh_private_key_file: ~/.ssh/private-key.pem
+
+# The following variables define sensitive credentials/passwords. As such these should never be
+# defined in plain text; always use a vault. This example follows best practice in defining variables
+# in terms of another variable (prefixed with 'vault_') defined and encrypted in the host's vault.yml file
+# using the ansible-vault command. See
+# http://docs.ansible.com/ansible/latest/user_guide/playbooks_vault.html
+# http://docs.ansible.com/ansible/latest/user_guide/vault.html and
+# https://docs.ansible.com/ansible/latest/user_guide/playbooks_best_practices.html#best-practices-for-variables-and-vaults
+#
+# The file ansible/host_vars/stellar-server.example.com/vault.yml is encrypted with the password
+# 'example-password'
+
+# The ssh password to use if not using key based authentication.
+ansible_ssh_pass: "{{ vault_ansible_ssh_pass }}"
+
+# Equivalent to ansible_sudo_pass or ansible_su_pass, allows you to set the privilege escalation password
+# This isn't required for password-less sudo
+ansible_become_pass: "{{ vault_ansible_become_pass }}"
+
+# For Red Hat Enterprise Linux these variables are need to register subscription in the redhat.yml playbook
+rhel:
+  username: "{{ vault_rhel.username }}"
+  password: "{{ vault_rhel.password }}"

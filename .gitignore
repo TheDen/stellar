@@ -3,3 +3,10 @@
 
 # JetBrains IDEs
 .idea/
+
+# Ansible
+*.retry
+
+# Vagrant
+.vagrant/
+*.vdi

@@ -1,0 +1,22 @@
+---
+- include_tasks: "{{ ansible_os_family | lower }}-family.yml"
+
+- name: download docker-compose for linux
+  get_url:
+    url: "https://github.com/docker/compose/releases/download/{{ docker_compose.version }}/docker-compose-Linux-x86_64"
+    dest: /usr/local/bin/docker-compose
+    checksum: "{{ docker_compose.checksum }}"
+    mode: u=rwx,g=rx,o=rx
+
+- name: add the main sudo user to the docker group
+  user:
+    name: "{{ ansible_user }}"
+    groups:
+      - docker
+    append: yes
+
+- name: enable and start the docker daemon
+  service:
+    name: docker
+    state: started
+    enabled: yes

@@ -1,0 +1,78 @@
+Vagrant.configure("2") do |config|
+
+  config.hostmanager.enabled = true
+  config.hostmanager.manage_host = true
+  config.hostmanager.manage_guest = true
+  config.hostmanager.ignore_private_ip = false
+  config.hostmanager.include_offline = true
+
+
+  config.vm.provider "virtualbox" do |v|
+    v.customize ["modifyvm", :id, "--cpuexecutioncap", "50"]
+    v.cpus = 1
+    v.memory = 2048
+
+  end
+
+  config.vm.define "vagrant-centos" do |centos|
+    centos.vm.box = "centos/7"
+    centos.vm.hostname = "centos-box"
+    centos.vm.network "private_network", ip: "192.168.99.100"
+
+    centos.persistent_storage.enabled = true
+    centos.persistent_storage.location = ".vagrant/docker-storage/centos.vdi"
+    centos.persistent_storage.size = 20000
+    centos.persistent_storage.mountname = 'docker'
+    centos.persistent_storage.filesystem = 'ext4'
+    centos.persistent_storage.mountpoint = '/var/lib/docker'
+    #centos.persistent_storage.volgroupname = 'myvolgroup'
+
+  end
+
+  config.vm.define "vagrant-rhel" do |rhel|
+    rhel.vm.box = "generic/rhel7"
+    rhel.vm.hostname = "rhel-box"
+    rhel.vm.network "private_network", ip: "192.168.99.101"
+
+    rhel.persistent_storage.enabled = true
+    rhel.persistent_storage.location = ".vagrant/docker-storage/rhel.vdi"
+    rhel.persistent_storage.size = 20000
+    rhel.persistent_storage.mountname = 'docker'
+    rhel.persistent_storage.filesystem = 'ext4'
+    rhel.persistent_storage.mountpoint = '/var/lib/docker'
+    #rhel.persistent_storage.volgroupname = 'myvolgroup'
+  end
+
+  config.vm.define "vagrant-ubuntu" do |ubuntu|
+    ubuntu.vm.box = "ubuntu/xenial64"
+    ubuntu.vm.hostname = "ubuntu-box"
+    ubuntu.vm.network "private_network", ip: "192.168.99.102"
+
+    ubuntu.persistent_storage.enabled = true
+    ubuntu.persistent_storage.location = ".vagrant/docker-storage/ubuntu.vdi"
+    ubuntu.persistent_storage.size = 20000
+    ubuntu.persistent_storage.mountname = 'docker'
+    ubuntu.persistent_storage.filesystem = 'ext4'
+    ubuntu.persistent_storage.mountpoint = '/var/lib/docker'
+    #ubuntu.persistent_storage.volgroupname = 'myvolgroup'
+
+    # vagrant stupidly binds hostname to loopback, let hostmanager manage it
+    # else services start on wrong interface
+    #ubuntu.vm.provision :shell, inline: "sed -i -r '/^127\\.0\\.0\\.1\\s+#{master.vm.hostname}\\b/d' /etc/hosts"
+
+
+    ubuntu.vm.provision "ansible" do |ansible|
+      # Override limit to provision all
+      ansible.limit = "all"
+      ansible.playbook = "vagrant.yml"
+      ansible.ask_vault_pass = true
+      #ansible.verbose = true  # uncomment to run ansible in verbose mode
+      ansible.compatibility_mode = "2.0"
+      ansible.raw_arguments = [
+        # '--check',  # uncomment to run ansible in check mode
+        # '--diff'    # uncomment to show diff in changed tasks
+      ]
+    end
+  end
+
+end

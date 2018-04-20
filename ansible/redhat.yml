@@ -1,0 +1,11 @@
+---
+- hosts: all
+  become: yes
+  tasks:
+    - name: subscribe to redhat
+      redhat_subscription:
+        state: present
+        username: "{{ rhel.username }}"
+        password: "{{ rhel.password }}"
+        autosubscribe: yes
+      when: ansible_distribution | lower == 'redhat'

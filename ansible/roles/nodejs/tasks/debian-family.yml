@@ -1,0 +1,21 @@
+---
+- name: install dockers official gpg key
+  apt_key:
+    url: "https://deb.nodesource.com/gpgkey/nodesource.gpg.key"
+    state: present
+
+- name: add docker repository
+  apt_repository:
+    repo: "{{ item }}"
+    state: present
+    filename: nodesource
+    update_cache: yes
+  with_items:
+    - "deb https://deb.nodesource.com/node_8.x {{ ansible_distribution_release }} main"
+    - "deb-src https://deb.nodesource.com/node_8.x {{ ansible_distribution_release }} main"
+
+- name: install nodejs
+  apt:
+    name: nodejs
+    state: latest
+    update_cache: no

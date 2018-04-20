@@ -1,0 +1,110 @@
+---
+- name: create stellar group
+  group:
+    name: stellar
+    state: present
+
+- name: create stellar user and ssh key
+  user:
+    name: stellar
+    group: stellar
+    shell: /bin/bash
+    groups:
+      - docker
+    append: yes
+    generate_ssh_key: yes
+    ssh_key_comment: "stellar@{{ ansible_hostname }}"
+    ssh_key_passphrase: "{{ stellar_ssh_key_passphrase }}"
+  register: stellar_user_register_result
+
+- name: authorized stellar ssh key
+  authorized_key:
+    user: stellar
+    state: present
+    key: "{{ stellar_user_register_result.ssh_public_key }}"
+
+- name: create directories needed for stellar
+  file:
+    name: "{{ item }}"
+    state: directory
+    owner: stellar
+    group: stellar
+  with_items:
+    - /opt/stellar
+    - /opt/stellar/data
+    - /home/stellar/bin
+    - /home/stellar/.jupyter
+
+- name: install python/conda libraries for data science
+  conda:
+    executable: "{{ conda_path }}/bin/conda"
+    name: "{{ item }}"
+    state: latest
+    update_dependencies: no
+  with_items: "{{ stellar_conda_stack }}"
+
+- become_user: stellar
+  name: configure jupyter notebook
+  template:
+    src: jupyter_notebook_config.py.j2
+    dest: /home/stellar/.jupyter/jupyter_notebook_config.py
+    owner: stellar
+    group: stellar
+
+- become_user: stellar
+  name: download stellar installer
+  get_url:
+    url: "https://github.com/data61/stellar/archive/v{{ stellar_dist.version }}.tar.gz"
+    dest: "/var/tmp/stellar-{{ stellar_dist.version }}.tar.gz"
+    checksum: "{{ stellar_dist.checksum }}"
+
+- become_user: stellar
+  name: unpack stellar installer
+  unarchive:
+    src: "/var/tmp/stellar-{{ stellar_dist.version }}.tar.gz"
+    dest: "/home/stellar"
+    remote_src: yes
+    owner: stellar
+    group: stellar
+    creates: "/home/stellar/stellar-{{ stellar_dist.version }}"
+
+- become_user: stellar
+  name: create stellar shim executable
+  template:
+    src: stellar.j2
+    dest: /home/stellar/bin/stellar
+    owner: stellar
+    group: stellar
+    mode: u=rwx,g=rx,o=rx
+
+- become_user: stellar
+  name: install steller python client
+  pip:
+    executable: "/usr/local/conda/bin/pip"
+    name: "https://github.com/data61/stellar-py/archive/v{{ stellar_py_version }}.tar.gz"
+    extra_args: --user
+
+- name: install cloudcmd
+  npm:
+    name: cloudcmd
+    state: latest
+    global: yes
+
+- name: configure stellar systemd service files
+  copy:
+    src: "{{ item }}.service"
+    dest: "/lib/systemd/system/{{ item }}.service"
+  with_items:
+    - cloudcmd
+    - jupyter-notebook
+  notify:
+    - reload systemd
+
+- name: enable and start services
+  service:
+    name: "{{ item }}"
+    state: started
+    enabled: yes
+  with_items:
+    - cloudcmd
+    - jupyter-notebook

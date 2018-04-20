@@ -1,0 +1,15 @@
+# See http://docs.ansible.com/ansible/latest/user_guide/intro_inventory.html
+# for details on the format of this file
+
+# Edit <hostname> below to define a single host you wish to manage to install stellar. Examples:
+#
+#   stellar-server.example.com     (fully qualified hostname or alias)
+#   stellar-server                 (hostname or alias)
+#   10.0.0.1                       (IP Address)
+
+<hostname>
+
+# Then in `host_vars/<hostname>/vars.yml` define the behavioural inventory parameters such as the
+# ssh user name, IP address (if using an hostname alias without a DNS entry), sudo password, etc. See
+# http://docs.ansible.com/ansible/latest/user_guide/intro_inventory.html#list-of-behavioral-inventory-parameters
+# for list of variables.

@@ -1,0 +1,12 @@
+[Unit]
+Description=Cloud Commander
+After=network.target
+
+[Service]
+User=stellar
+Group=stellar
+ExecStart=/usr/bin/cloudcmd --port 7777 --root /opt/stellar/data --no-console --no-terminal --no-vim --one-panel-mode --no-config-dialog
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target
