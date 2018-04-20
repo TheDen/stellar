@@ -5,7 +5,7 @@ After=network.target
 [Service]
 User=stellar
 Group=stellar
-WorkingDirectory=~
+WorkingDirectory=/home/stellar
 ExecStart=/usr/local/conda/bin/jupyter notebook --no-browser
 Restart=on-failure
 
