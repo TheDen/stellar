@@ -1,7 +1,7 @@
 ---
 stellar_ssh_key_passphrase:
 
-stellar_py_version: 0.2.1
+stellar_py_version: 0.2.2
 stellar_dist:
   version: 0.1.0
   checksum: sha256:701634956289cc34b9d2e82a39fdc59ef2d062ed6af8537adb26c5886e85ee40
@@ -13,3 +13,15 @@ stellar_dist:
 # OSError: [Errno 99] Cannot assign requested address
 # just set as the IPv4 loopback address
 jupyter_notebook_ip_address: 127.0.0.1
+
+stellar_conda_stack:
+  # Versions from https://github.com/jupyter/docker-stacks/blob/master/base-notebook/Dockerfile
+  - jupyterhub=0.8.*
+  - notebook=5.4.*
+  - jupyterlab=0.31.*
+
+  # Versions from https://github.com/jupyter/docker-stacks/blob/master/scipy-notebook/Dockerfile
+  - pandas=0.19*
+  - matplotlib=2.0*
+  - scipy=0.19*
+  - scikit-learn=0.18*

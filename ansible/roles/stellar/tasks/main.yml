@@ -35,6 +35,14 @@
     - /home/stellar/bin
     - /home/stellar/.jupyter
 
+- name: install python/conda libraries for data science
+  conda:
+    executable: "{{ conda_path }}/bin/conda"
+    name: "{{ item }}"
+    state: latest
+    update_dependencies: no
+  with_items: "{{ stellar_conda_stack }}"
+
 - become_user: stellar
   name: configure jupyter notebook
   template:
@@ -73,7 +81,7 @@
   name: install steller python client
   pip:
     executable: "/usr/local/conda/bin/pip"
-    name: https://github.com/data61/stellar-py/archive/v0.2.1.tar.gz
+    name: "https://github.com/data61/stellar-py/archive/v{{ stellar_py_version }}.tar.gz"
     extra_args: --user
 
 - name: install cloudcmd

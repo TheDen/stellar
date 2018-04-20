@@ -30,6 +30,5 @@
   roles:
     - docker
     - conda
-    - jupyter
     - nodejs
     - stellar
