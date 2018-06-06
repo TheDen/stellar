@@ -1,0 +1,32 @@
+site_name: Stellar Documentation
+docs_dir: doc
+pages:
+  - 'Getting Started': 'index.md'
+  - Documentation:
+    - 'EC2 instance setup': 'aws.md'
+    - 'Connecting to your Stellar Demo Platform': 'remote.md'
+    - 'Server-side installation': 'server.md'
+  - About:
+    - 'License': 'about/license.md'
+theme:
+  name: 'material'
+  custom_dir: 'doc/theme'
+  favicon: assets/images/favicon.png
+extra_css:
+  - 'stylesheets/extra.css'
+
+#repository
+repo_name: data61/stellar
+repo_url: https://github.com/data61/stellar
+edit_uri: "https://github.com/data61/stellar/tree/master/doc"
+
+extra:
+  social:
+    - type: globe
+      link: https://data61.csiro.au
+    - type: github-alt
+      link: https://github.com/data61
+    - type: twitter
+      link: https://twitter.com/Data61news
+    - type: linkedin
+      link: https://www.linkedin.com/company/csiro%27sdata61
