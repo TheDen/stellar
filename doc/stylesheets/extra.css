@@ -1,0 +1,22 @@
+/* Add data61 colours */
+
+.md-header {
+    background-color: rgb(34, 133, 98);
+}
+
+@media only screen and (max-width: 76.1875em) {
+    html .md-nav--primary .md-nav__title--site {
+        position: relative;
+        background-color: rgb(34, 133, 98);
+        color: #fff;
+    }
+}
+
+@media only screen and (max-width: 59.9375em) {
+    .md-nav__source {
+        display: block;
+        padding: 0 .4rem;
+        background-color: rgb(34, 133, 98);
+        color: #fff;
+    }
+}
