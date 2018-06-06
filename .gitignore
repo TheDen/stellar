@@ -3,3 +3,6 @@
 
 # JetBrains IDEs
 .idea/
+
+# mkdocs build output
+site/
