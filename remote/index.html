@@ -1,0 +1,730 @@
+
+
+
+
+<!DOCTYPE html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      <meta http-equiv="x-ua-compatible" content="ie=edge">
+      
+      
+      
+      
+        <meta name="lang:clipboard.copy" content="Copy to clipboard">
+      
+        <meta name="lang:clipboard.copied" content="Copied to clipboard">
+      
+        <meta name="lang:search.language" content="en">
+      
+        <meta name="lang:search.pipeline.stopwords" content="True">
+      
+        <meta name="lang:search.pipeline.trimmer" content="True">
+      
+        <meta name="lang:search.result.none" content="No matching documents">
+      
+        <meta name="lang:search.result.one" content="1 matching document">
+      
+        <meta name="lang:search.result.other" content="# matching documents">
+      
+        <meta name="lang:search.tokenizer" content="[\s\-]+">
+      
+      <link rel="shortcut icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-0.17.3, mkdocs-material-2.7.3">
+    
+    
+      
+        <title>Connecting to your Stellar Demo Platform - Stellar Documentation</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/application.8d40d89b.css">
+      
+    
+    
+      <script src="../assets/javascripts/modernizr.1aa3b519.js"></script>
+    
+    
+      <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
+      
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,700|Roboto+Mono">
+        <style>body,input{font-family:"Roboto","Helvetica Neue",Helvetica,Arial,sans-serif}code,kbd,pre{font-family:"Roboto Mono","Courier New",Courier,monospace}</style>
+      
+      <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    
+    
+      <link rel="stylesheet" href="../stylesheets/extra.css">
+    
+    
+  </head>
+  
+    <body dir="ltr">
+  
+    <svg class="md-svg">
+      <defs>
+        
+        
+          <svg xmlns="http://www.w3.org/2000/svg" width="416" height="448"
+    viewBox="0 0 416 448" id="github">
+  <path fill="currentColor" d="M160 304q0 10-3.125 20.5t-10.75 19-18.125
+        8.5-18.125-8.5-10.75-19-3.125-20.5 3.125-20.5 10.75-19 18.125-8.5
+        18.125 8.5 10.75 19 3.125 20.5zM320 304q0 10-3.125 20.5t-10.75
+        19-18.125 8.5-18.125-8.5-10.75-19-3.125-20.5 3.125-20.5 10.75-19
+        18.125-8.5 18.125 8.5 10.75 19 3.125 20.5zM360
+        304q0-30-17.25-51t-46.75-21q-10.25 0-48.75 5.25-17.75 2.75-39.25
+        2.75t-39.25-2.75q-38-5.25-48.75-5.25-29.5 0-46.75 21t-17.25 51q0 22 8
+        38.375t20.25 25.75 30.5 15 35 7.375 37.25 1.75h42q20.5 0
+        37.25-1.75t35-7.375 30.5-15 20.25-25.75 8-38.375zM416 260q0 51.75-15.25
+        82.75-9.5 19.25-26.375 33.25t-35.25 21.5-42.5 11.875-42.875 5.5-41.75
+        1.125q-19.5 0-35.5-0.75t-36.875-3.125-38.125-7.5-34.25-12.875-30.25-20.25-21.5-28.75q-15.5-30.75-15.5-82.75
+        0-59.25 34-99-6.75-20.5-6.75-42.5 0-29 12.75-54.5 27 0 47.5 9.875t47.25
+        30.875q36.75-8.75 77.25-8.75 37 0 70 8 26.25-20.5
+        46.75-30.25t47.25-9.75q12.75 25.5 12.75 54.5 0 21.75-6.75 42 34 40 34
+        99.5z" />
+</svg>
+        
+      </defs>
+    </svg>
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="search" autocomplete="off">
+    <label class="md-overlay" data-md-component="overlay" for="drawer"></label>
+    
+      <a href="#connecting-to-your-stellar-demo-platform" tabindex="1" class="md-skip">
+        Skip to content
+      </a>
+    
+    
+      <header class="md-header" data-md-component="header">
+  <nav class="md-header-nav md-grid">
+    <div class="md-flex">
+      <div class="md-flex__cell md-flex__cell--shrink">
+        <a href=".." title="Stellar Documentation" class="md-header-nav__button md-logo">
+          
+            <i class="md-icon"></i>
+          
+        </a>
+      </div>
+      <div class="md-flex__cell md-flex__cell--shrink">
+        <label class="md-icon md-icon--menu md-header-nav__button" for="drawer"></label>
+      </div>
+      <div class="md-flex__cell md-flex__cell--stretch">
+        <div class="md-flex__ellipsis md-header-nav__title" data-md-component="title">
+          
+            
+              <span class="md-header-nav__topic">
+                Stellar Documentation
+              </span>
+              <span class="md-header-nav__topic">
+                Connecting to your Stellar Demo Platform
+              </span>
+            
+          
+        </div>
+      </div>
+      <div class="md-flex__cell md-flex__cell--shrink">
+        
+          
+            <label class="md-icon md-icon--search md-header-nav__button" for="search"></label>
+            
+<div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="query" data-md-state="active">
+      <label class="md-icon md-search__icon" for="search"></label>
+      <button type="reset" class="md-icon md-search__icon" data-md-component="reset" tabindex="-1">
+        &#xE5CD;
+      </button>
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="result">
+          <div class="md-search-result__meta">
+            Type to start searching
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+          
+        
+      </div>
+      
+        <div class="md-flex__cell md-flex__cell--shrink">
+          <div class="md-header-nav__source">
+            
+
+
+  
+
+
+  <a href="https://github.com/data61/stellar/" title="Go to repository" class="md-source" data-md-source="github">
+    
+      <div class="md-source__icon">
+        <svg viewBox="0 0 24 24" width="24" height="24">
+          <use xlink:href="#github" width="24" height="24"></use>
+        </svg>
+      </div>
+    
+    <div class="md-source__repository">
+      data61/stellar
+    </div>
+  </a>
+
+          </div>
+        </div>
+      
+    </div>
+  </nav>
+</header>
+    
+    <div class="md-container">
+      
+        
+      
+      
+      <main class="md-main">
+        <div class="md-main__inner md-grid" data-md-component="container">
+          
+            
+              <div class="md-sidebar md-sidebar--primary" data-md-component="navigation">
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    <nav class="md-nav md-nav--primary" data-md-level="0">
+  <label class="md-nav__title md-nav__title--site" for="drawer">
+    <span class="md-nav__button md-logo">
+      
+        <i class="md-icon"></i>
+      
+    </span>
+    Stellar Documentation
+  </label>
+  
+    <div class="md-nav__source">
+      
+
+
+  
+
+
+  <a href="https://github.com/data61/stellar/" title="Go to repository" class="md-source" data-md-source="github">
+    
+      <div class="md-source__icon">
+        <svg viewBox="0 0 24 24" width="24" height="24">
+          <use xlink:href="#github" width="24" height="24"></use>
+        </svg>
+      </div>
+    
+    <div class="md-source__repository">
+      data61/stellar
+    </div>
+  </a>
+
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href=".." title="Getting Started" class="md-nav__link">
+      Getting Started
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+  
+
+
+  <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-2" type="checkbox" id="nav-2" checked>
+    
+    <label class="md-nav__link" for="nav-2">
+      Documentation
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="1">
+      <label class="md-nav__title" for="nav-2">
+        Documentation
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../aws/" title="EC2 instance setup" class="md-nav__link">
+      EC2 instance setup
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+  
+
+
+  <li class="md-nav__item md-nav__item--active">
+    
+    <input class="md-toggle md-nav__toggle" data-md-toggle="toc" type="checkbox" id="toc">
+    
+      
+    
+    
+      <label class="md-nav__link md-nav__link--active" for="toc">
+        Connecting to your Stellar Demo Platform
+      </label>
+    
+    <a href="./" title="Connecting to your Stellar Demo Platform" class="md-nav__link md-nav__link--active">
+      Connecting to your Stellar Demo Platform
+    </a>
+    
+      
+<nav class="md-nav md-nav--secondary">
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="toc">Table of contents</label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#connecting-with-a-web-browser" title="Connecting with a web browser" class="md-nav__link">
+    Connecting with a web browser
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#additional-software" title="Additional software" class="md-nav__link">
+    Additional software
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#connecting-from-windows" title="Connecting from Windows" class="md-nav__link">
+    Connecting from Windows
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#puttygen" title="PuTTYgen" class="md-nav__link">
+    PuTTYgen
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#putty" title="PuTTY" class="md-nav__link">
+    PuTTY
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#connecting-from-macos-or-linux" title="Connecting from macOS or Linux" class="md-nav__link">
+    Connecting from macOS or Linux
+  </a>
+  
+</li>
+      
+      
+      
+      
+      
+    </ul>
+  
+</nav>
+    
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../server/" title="Server-side installation" class="md-nav__link">
+      Server-side installation
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-3" type="checkbox" id="nav-3">
+    
+    <label class="md-nav__link" for="nav-3">
+      About
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="1">
+      <label class="md-nav__title" for="nav-3">
+        About
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../about/license/" title="License" class="md-nav__link">
+      License
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="toc">
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+<nav class="md-nav md-nav--secondary">
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="toc">Table of contents</label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#connecting-with-a-web-browser" title="Connecting with a web browser" class="md-nav__link">
+    Connecting with a web browser
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#additional-software" title="Additional software" class="md-nav__link">
+    Additional software
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#connecting-from-windows" title="Connecting from Windows" class="md-nav__link">
+    Connecting from Windows
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#puttygen" title="PuTTYgen" class="md-nav__link">
+    PuTTYgen
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#putty" title="PuTTY" class="md-nav__link">
+    PuTTY
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#connecting-from-macos-or-linux" title="Connecting from macOS or Linux" class="md-nav__link">
+    Connecting from macOS or Linux
+  </a>
+  
+</li>
+      
+      
+      
+      
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          <div class="md-content">
+            <article class="md-content__inner md-typeset">
+              
+                
+                  <a href="https://github.com/data61/stellar/tree/master/doc/remote.md" title="Edit this page" class="md-icon md-content__icon">&#xE3C9;</a>
+                
+                
+                <h1 id="connecting-to-your-stellar-demo-platform">Connecting to your Stellar Demo Platform</h1>
+<p>The following instructions can be used  to connect to a <em>Stellar</em> server, either
+to get console access (to install, start,  stop or configure the platform) or to
+gain browser access to the UI and Python notebook.</p>
+<h2 id="connecting-with-a-web-browser">Connecting with a web browser</h2>
+<p>When working on a remote client machine, connecting to the Stellar server through
+a web browser installed on the client is the recommended procedure.</p>
+<p>To make  the connection  possible, together  with a web  browser, software to
+create encrypted SSH <em>tunnels</em> (also known  as <em>port forwarding</em>) is required on
+the client machine.</p>
+<p>The general procedure is therefore:</p>
+<ol>
+<li>Build  a tunnel connection  to the server,  forwarding ports 6161  (main UI),
+   7777 (file sharing), 8888 (Python notebook) and 3010 (Search UI). For Windows, this is described <a href="./#connecting-from-windows">here</a>. For macOS or Linux, this is described <a href="./#connecting-from-macos-or-linux">here</a>.</li>
+<li>Start the local browser and open the following links in separate tabs:</li>
+<li><a href="http://127.0.0.1:6161">Web UI</a></li>
+<li><a href="http://127.0.0.1:7777">File transfer - if installed</a></li>
+<li><a href="http://127.0.0.1:8888">Python notebook</a></li>
+<li><a href="http://127.0.0.1:3010">Search UI</a></li>
+</ol>
+<p><strong>Note:</strong> at the moment the only officially supported browser is <a href="https://www.google.com/chrome/">Google
+Chrome</a>.</p>
+<p>The  remainder of  this  document details  the steps  and  required software  to
+created a tunnel connection on Linux, macOS and Windows systems.</p>
+<p>This procedure was tested, and is guaranteed to work, only on the following systems:</p>
+<ul>
+<li>macOS Sierra or HighSierra, with default SSH client</li>
+<li>Ubuntu Linux 16.04, with default SSH client</li>
+<li>Windows 10, with PuTTY v0.70</li>
+</ul>
+<h3 id="additional-software">Additional software</h3>
+<p>The software packages above are sufficient for importing data into Stellar, triggering the
+graph analytics pipeline and retrieving the results.  To visualize the output of
+certain operations a client application capable of displaying
+<a href="https://gephi.org/users/supported-graph-formats/gdf-format/">GDF</a> and
+<a href="https://gephi.org/users/supported-graph-formats/graphml-format/">GraphML</a> is
+required.</p>
+<p>The recommended  application, which has  been tested with <em>Stellar</em>  output data
+formats, is <a href="https://gephi.org">Gephi</a>.</p>
+<h2 id="connecting-from-windows">Connecting from Windows</h2>
+<p>Download and install PuTTY <a href="https://www.putty.org">https://www.putty.org</a>. You will need PuTTYgen and the PuTTY SSH client itself to connect to the remote machine.</p>
+<h3 id="puttygen">PuTTYgen</h3>
+<p>If you have a <em>.pem</em> file, the private key format generate by AWS EC2, you can convert it into a format that can be used by PuTTY using PuTTYgen (<em>.ppk</em>).</p>
+<p>To convert your private key:</p>
+<ol>
+<li>Start PuTTYgen.</li>
+<li>
+<p>Under <strong>Type of key to generate</strong>, choose <strong>RSA</strong></p>
+<p><img alt="." src="../pics/windows-puttygen-rsa.png" title="PuTTYgen" /></p>
+</li>
+<li>
+<p>Import the <em>.pem</em> file.</p>
+<p><img alt="." src="../pics/windows-puttygen-import.png" title="PuTTYgen" /></p>
+</li>
+<li>
+<p>Save private key.</p>
+<p><img alt="." src="../pics/windows-puttygen-save.png" title="PuTTYgen" /></p>
+</li>
+</ol>
+<h3 id="putty">PuTTY</h3>
+<p>You can now connect to the remote machine via PuTTY.</p>
+<ol>
+<li>Start PuTTY.</li>
+<li>
+<p>Fill in the host name.</p>
+<p><img alt="." src="../pics/windows-putty-host.png" title="PuTTY" /></p>
+</li>
+<li>
+<p>Navigate to the <em>Auth</em> section and locate your private key file for authentication.</p>
+<p><img alt="." src="../pics/windows-putty-auth.png" title="PuTTY" /></p>
+</li>
+<li>
+<p>Navigate to the <em>Tunnels</em> section to add 6161, 7777, 8888 and 3010 as new forwarded ports.</p>
+</li>
+</ol>
+<p><strong>Note:</strong> 4 ports must be forwarded, but only 3 are visible in the screenshot below.</p>
+<p><img alt="." src="../pics/windows-putty-ports.png" title="PuTTY" /></p>
+<ol>
+<li>
+<p>Click <strong>Open</strong> to connect.</p>
+<p><img alt="." src="../pics/windows-ssh-success.png" title="Success" /></p>
+</li>
+</ol>
+<h2 id="connecting-from-macos-or-linux">Connecting from macOS or Linux</h2>
+<ol>
+<li>
+<p>Open a terminal.</p>
+</li>
+<li>
+<p>Ensure that your <em>.pem</em> file is private with the correct permissions
+   <code>bash
+   chmod 400 ~/keys/stellar-demos.pem</code></p>
+</li>
+<li>
+<p>Use the <strong>ssh</strong> command to connect to the remote machine.
+   <code>bash
+   ssh -i ~/keys/stellar-demos.pem ubuntu@REMOTE_IP_ADDRESS</code>
+   where <code>REMOTE_IP_ADDRESS</code> is the address of the remote machine.</p>
+</li>
+<li>
+<p>In a new shell, on the <strong>local</strong> machine, forward the ports 6161, 7777, 8888 and 3010.
+   <code>bash
+   ssh -N -i ~/keys/stellar-demos.pem -L 8888:localhost:8888 -L 6161:localhost:6161 -L 7777:localhost:7777 -L 3010:localhost:3010   ubuntu@REMOTE_IP_ADDRESS</code>
+   If you would like to change the port to map to, the syntax for the ssh command is <code>[local-port]:localhost:[remote-port]</code></p>
+</li>
+<li>
+<p>Open the browser on your <strong>local</strong> machine and use the pages as described <a href="./#connecting-with-a-web-browser">above</a></p>
+</li>
+<li>
+<p>To inspect the Stellar logs on the <strong>remote</strong> machine, run the following command
+   <code>bash
+   docker logs --follow DOCKER_CONTAINER_NAME</code>
+   where <code>DOCKER_CONTAINER_NAME</code> is the name of one of the running containers. A list of running containers can be shown with the command
+   <code>bash
+   docker ps</code></p>
+</li>
+</ol>
+                
+                  
+                
+              
+              
+                
+
+
+              
+            </article>
+          </div>
+        </div>
+      </main>
+      
+        
+<footer class="md-footer">
+  
+    <div class="md-footer-nav">
+      <nav class="md-footer-nav__inner md-grid">
+        
+          <a href="../aws/" title="EC2 instance setup" class="md-flex md-footer-nav__link md-footer-nav__link--prev" rel="prev">
+            <div class="md-flex__cell md-flex__cell--shrink">
+              <i class="md-icon md-icon--arrow-back md-footer-nav__button"></i>
+            </div>
+            <div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title">
+              <span class="md-flex__ellipsis">
+                <span class="md-footer-nav__direction">
+                  Previous
+                </span>
+                EC2 instance setup
+              </span>
+            </div>
+          </a>
+        
+        
+          <a href="../server/" title="Server-side installation" class="md-flex md-footer-nav__link md-footer-nav__link--next" rel="next">
+            <div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title">
+              <span class="md-flex__ellipsis">
+                <span class="md-footer-nav__direction">
+                  Next
+                </span>
+                Server-side installation
+              </span>
+            </div>
+            <div class="md-flex__cell md-flex__cell--shrink">
+              <i class="md-icon md-icon--arrow-forward md-footer-nav__button"></i>
+            </div>
+          </a>
+        
+      </nav>
+    </div>
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-footer-copyright">
+        
+        powered by
+        <a href="http://www.mkdocs.org">MkDocs</a>
+        and
+        <a href="https://squidfunk.github.io/mkdocs-material/">
+          Material for MkDocs</a>
+      </div>
+      
+        
+  <div class="md-footer-social">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    
+      <a href="https://data61.csiro.au" class="md-footer-social__link fa fa-globe"></a>
+    
+      <a href="https://github.com/data61" class="md-footer-social__link fa fa-github-alt"></a>
+    
+      <a href="https://twitter.com/Data61news" class="md-footer-social__link fa fa-twitter"></a>
+    
+      <a href="https://www.linkedin.com/company/csiro%27sdata61" class="md-footer-social__link fa fa-linkedin"></a>
+    
+  </div>
+
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    
+      <script src="../assets/javascripts/application.b438e6c5.js"></script>
+      
+      <script>app.initialize({version:"0.17.3",url:{base:".."}})</script>
+      
+    
+    
+      
+    
+  </body>
+</html>

@@ -1,0 +1,219 @@
+{
+    "docs": [
+        {
+            "location": "/",
+            "text": "Stellar Graph Analytics\n\n\nStellar is a graph analytics platform designed for running algorithms on large scale graph data. It supports data integration, entity resolution, machine learning on graphs and visualisation.\n\n\nFeatures\n\n\n\n\nData Integration\n\n\nNode Embedding for Machine Learning (Node2Vec)\n\n\nGraph Convolutional Networks (GCN)\n\n\nEntity Resolution\n\n\nGraphs searchable through ElasticSearch\n\n\nDockerized containers for orchestration\n\n\nApache Nifi for coordination\n\n\nWeb UI for Data Integration\n\n\nPython Client\n\n\n\n\nOverview\n\n\nStellar is designed to:\n\n\n\n\nMerge data into a graph\n\n\nRun search, machine learning, and entity resolution across the graph\n\n\nVisualise results\n\n\n\n\nThis repository is the prototype release for the Stellar platform. The current limitations are as follows:\n\n\n\n\nSingle User\n\n\nSingle Machine\n\n\n50,000 nodes\n\n\nCSV data only\n\n\nNumeric values for machine learning\n\n\nNo missing values for machine learning\n\n\nFixed datasets for entity resolution\n\n\nWeb UI focused only on integration\n\n\nFor Data Visualisation you will need to install \nGephi\n\n\n\n\nModules\n\n\nStellar is a collection of Docker containers coordinated with Apache Nifi. The collection of docker containers are built from the following repositories:\n\n\n\n\nCoordinator\n\n\nData Integration\n\n\nSearch\n\n\nEntity Resolution\n\n\nMachine Learning\n\n\nWeb UI\n\n\nPython Client\n\n\n\n\nThis GitHub repository uses Docker Compose to download and launch the Docker containers. The containers are downloaded from DockerHub in the \nData61 repository\n.\n\n\nInstall\n\n\nStellar runs as a server application, and the user connects to the server through the Web UI or the Python Client.\n\n\nTo connect remotely to a Stellar server instance follow these \ninstructions\n.\n\n\nIf you would like to install and run the Stellar server manually, you will need to follow the specifications and instructions as specified \nhere\n.\n\n\ntest",
+            "title": "Getting Started"
+        },
+        {
+            "location": "/#stellar-graph-analytics",
+            "text": "Stellar is a graph analytics platform designed for running algorithms on large scale graph data. It supports data integration, entity resolution, machine learning on graphs and visualisation.",
+            "title": "Stellar Graph Analytics"
+        },
+        {
+            "location": "/#features",
+            "text": "Data Integration  Node Embedding for Machine Learning (Node2Vec)  Graph Convolutional Networks (GCN)  Entity Resolution  Graphs searchable through ElasticSearch  Dockerized containers for orchestration  Apache Nifi for coordination  Web UI for Data Integration  Python Client",
+            "title": "Features"
+        },
+        {
+            "location": "/#overview",
+            "text": "Stellar is designed to:   Merge data into a graph  Run search, machine learning, and entity resolution across the graph  Visualise results   This repository is the prototype release for the Stellar platform. The current limitations are as follows:   Single User  Single Machine  50,000 nodes  CSV data only  Numeric values for machine learning  No missing values for machine learning  Fixed datasets for entity resolution  Web UI focused only on integration  For Data Visualisation you will need to install  Gephi",
+            "title": "Overview"
+        },
+        {
+            "location": "/#modules",
+            "text": "Stellar is a collection of Docker containers coordinated with Apache Nifi. The collection of docker containers are built from the following repositories:   Coordinator  Data Integration  Search  Entity Resolution  Machine Learning  Web UI  Python Client   This GitHub repository uses Docker Compose to download and launch the Docker containers. The containers are downloaded from DockerHub in the  Data61 repository .",
+            "title": "Modules"
+        },
+        {
+            "location": "/#install",
+            "text": "Stellar runs as a server application, and the user connects to the server through the Web UI or the Python Client.  To connect remotely to a Stellar server instance follow these  instructions .  If you would like to install and run the Stellar server manually, you will need to follow the specifications and instructions as specified  here .  test",
+            "title": "Install"
+        },
+        {
+            "location": "/aws/",
+            "text": "EC2 instance setup\n\n\nThis page details  how to setup a \nStellar\n server  using a cloud-based machine.\nThe installation procedure refers to Amazon public cloud service AWS.\n\n\nInstance launch\n\n\nFor a \nStellar\n server Amazon EC2 (a service within AWS) is used. The general\nprocedure for launching an EC2 server (\ninstance\n) is covered by \nAmazon's\ndocumentation\n.\n\n\nSelect an instance type that fulfills \nStellar\n \nserver\nrequirements\n.  For the operating system (Ubuntu Server 16.04 LTS)\nthe Amazon AMI with code ami-33ab5251 is recommended.\n\n\nWithout  further  configuration,  EC2  instances  can be  reached  via  SSH  und\nkey-pair-based  authentication. This  configuration  is  sufficient for  running\n\nStellar\n.\n\n\nBasic install as user ubuntu\n\n\nThe following steps are necessary to install  all the software which is not part\nof \nStellar\n server installation, but is required to complete it.\n\n\nThese steps are performed as the  user \nubuntu\n, which has administrative rights\non the EC2 Ubuntu instances.\n\n\nConnecting to the remote instance requires an \nSSH client\n.\n\n\nFor instance,  under Linux or  OSX, from a  terminal use the  following command,\nwhere \n<EC2IP>\n is the IP address and  the \n<EC2KEY>\n is the private key (\n.pem\n\nfile) provided by AWS upon launch:\n\n\nssh -i <EC2KEY> ubuntu@<EC2IP>\n\n\n\n\nIf succesful, the command will present a remote terminal.  All following\ncommands should be issued inside the remote terminal.u\n\n\nInstall additional Ubuntu packages\n\n\nInstall the following packages, which are officially part of the Ubuntu server\n16.04 distribution. Issue in sequence the commands:\n\n\n# Update package list.\nsudo apt-get update\n\n# Get tools needed for installation/maintenance.\nsudo apt-get install -y \\\n  aptitude \\\n  apt-transport-https \\\n  ca-certificates \\\n  curl \\\n  wget \\\n  less \\\n  screen\n\n# Install python.\nsudo apt-get install -y \\\n  ipython3 \\\n  ipython3-notebook \\\n  python3-pip\n\n# Install a web browser.\nsudo apt-get install -y firefox\n\n\n\n\nInstall Docker\n\n\nTo install \nDocker\n issue these commands:\n\n\ncurl -fsSL https://download.docker.com/linux/ubuntu/gpg > docker.key\n\nsudo apt-key add docker.key\n\nsudo add-apt-repository \"deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable\"\n\nsudo apt-get update\n\nsudo apt-get install -y docker-ce\n\nsudo usermod -aG docker ubuntu\n\n\n\n\nClose the  SSH connection with  \nexit\n and connect  again. Then test  the Docker\ninstallation with:\n\n\ndocker run hello-world\n\n\n\n\nA Docker container should get downloaded and executed. It will print the message\n\nHello from Docker!\n and additional useful information.\n\n\nInstall docker-compose\n\n\nTo install \ndocker-compose\n issue this commands:\n\n\nsudo curl -L https://github.com/docker/compose/releases/download/1.18.0/docker-compose-`uname -s`-`uname -m` -o /usr/local/bin/docker-compose\n\nsudo chmod +x /usr/local/bin/docker-compose\n\nsudo ln -s /usr/local/bin/docker-compose /usr/bin\n\ndocker-compose --version\n\n\n\n\nCreate the stellar user\n\n\nCreate the user \nstellar\n which will run the \nStellar\n platform.\n\n\nsudo addgroup --gid 1001 stellar\nsudo adduser --uid 1001 --gid 1001 --disabled-password --gecos stellar,,,, stellar\nsudo usermod -aG docker stellar\n\n\n\n\nComplete the new user setup.\n\n\n# Become user stellar\nsudo -i -u stellar\n\n# Create an directory for user executables\nmkdir -p ~/bin\n\n# Generate and activate a key pair for stellar\nssh-keygen -t rsa -C \"stellar@localhost\"\n# Press enter at all questions.\ncat ~/.ssh/id_rsa.pub >> ~/.ssh/authorized_keys\n\n\n\n\nGo back to being user \nubuntu\n and retrieve the new user's access credentials:\n\n\nexit\nsudo cp /home/stellar/.ssh/id_rsa /home/ubuntu/stellar.pem\nsudo chown ubuntu:ubuntu /home/ubuntu/stellar.pem\n\n\n\n\nCreate Stellar working directory\n\n\nsudo rm -rf /opt/stellar\n\nsudo mkdir -p /opt/stellar\n\nsudo chown -R stellar:stellar /opt/stellar\n\n\n\n\nInstall NodeJS and cloudcmd (optional)\n\n\nThe \nNodeJS\n  package \ncloudcmd\n  is not strictly  necessary for  \nStellar\n, but\noffers a convenient way of remotely exchanging data between client and server.\n\n\nIf  this package  is not  installed, users  is supposed  to have  a remote  copy\nutility on  their clients (e.g.  \nscp\n, \nFilezilla\n)  to exchange data  with the\nserver.\n\n\nwget https://nodejs.org/dist/v8.10.0/node-v8.10.0-linux-x64.tar.xz\n\nsudo -i\n\nmkdir -p /opt/sw\n\ncd /opt/sw\n\ntar xJvf /home/ubuntu/node-v8.10.0-linux-x64.tar.xz\n\nPATH=/opt/sw/node-v8.10.0-linux-x64/bin:$PATH npm i cloudcmd -g\n\nexit\n\n\n\n\nLogout from server\n\n\nLeave the server with command \nexit\n or closing the SSH client application.\n\n\nBefore continuing  it the  user must  retrieve the new  connection key  that was\ncreated for the  user \nstellar\n.  It was saved  as \n/home/ubuntu/stellar.pem\n on\nthe server  and it  can be  retrieved with  a remote  copy client  (e.g.  \nscp\n,\n\nFilezilla\n). For instance, on Linux or OSX this command can be used to copy the\nkey in the current directory:\n\n\nscp -i <EC2KEY> ubuntu@<EC2IP>:/home/ubuntu/stellar.pem .\n\n\n\n\nNote:\n it is  advisable to store the key  in a safe place and  remove it from\nthe server.\n\n\nFinal install as user stellar\n\n\nAfter completing the previous steps, the system is ready for a user to log in as\nuser \nstellar\n to finalize the installation  and start the \nStellar\n platform on\nthe server.\n\n\nConnect to the server again, as \nstellar\n user. For instance, under Linxu or OSX\nissue:\n\n\nssh -i stellar.pem stellar@<EC2IP>\n\n\n\n\nAfter connecting complete the following steps.\n\n\nInstall Jupyter and Stellar python client\n\n\n# Install jupyter\npip3 install --user jupyter pandas\n\n# Useful additional packages.\npip3 install --user numpy scikit-learn matplotlib\n\n# Get python client and install it\nwget https://github.com/data61/stellar-py/archive/v0.2.2.tar.gz\ntar xzvf v0.2.2.tar.gz\ncd stellar-py-0.2.2\npip3 install --user .\n\n\n\n\nRetrieve Stellar installation script\n\n\n# Retrieve the scripts\ncd ~/bin\nwget https://github.com/data61/stellar/archive/v0.1.0.tar.gz\ntar xzvf v0.1.0.tar.gz\nrm v0.1.0.tar.gz\n\n# Create a launcher\necho -e \"#\"'!'\"/usr/bin/env bash\\nbash /home/stellar/bin/stellar-0.1.0/scripts/docker/stellar.sh \\\"\\$@\\\"\\n\" > stellar\nchmod +x stellar\ncd\n\n\n\n\nLaunch stellar\n\n\nIt is now possible to launch \nStellar\n. Issue the command\n\n\nstellar start\n\n\n\n\nThe  first startup  may  take  several minutes,  as  the  Docker containers  are\ndownloaded. To stop \nStellar\n use:\n\n\nstellar stop\n\n\n\n\nLaunch the Jupyter notebook server (optional)\n\n\nIt is optional, but  recommended to launch a Jupyter notebook  server. \n\n\nCreate the Jupyter configuration for the server:\n\n\nmkdir -p ~/.jupyter\necho \"c.NotebookApp.token = ''\" > ~/.jupyter/jupyter_notebook_config.py\necho \"c.NotebookApp.password = ''\" >> ~/.jupyter/jupyter_notebook_config.py\n\n\n\n\n\nStart Jupyter. It is also recommended  to start it within a terminal multiplexer\n(like \nGNU screen\n), with:\n\n\nscreen -dmS jupyter bash -c 'jupyter notebook --no-browser ~/stellar-py-0.2.2/examples'\n\n\n\n\nLaunch cloudcmd (optional)\n\n\nThis step is  optional, but can make remote file  exchange much more convenient.\nIt is  recommended to start  cloudcmd within  a terminal multiplexer  (like \nGNU\nscreen\n), with:\n\n\nscreen -dmS cloudcmd bash -c 'PATH=/opt/sw/node-v8.10.0-linux-x64/bin:$PATH cloudcmd --port 7777 --root /opt/stellar/data --no-console --no-terminal --no-vim --one-panel-mode --no-config-dialog'\n\n\n\n\nUse Stellar\n\n\nStellar is now ready on your server\n.\n\n\nCopy data files\n\n\nYou may copy over data files using cloudcmd if installed or with a remote copy client.\n\n\nFor instance on Linux and OSX do:\n\n\nscp -i stellar.pem stellar@<EC2IP>:my-example.csv /opt/stellar/data\n\n\n\n\nConnect to Stellar\n\n\nTo use \nStellar\n UI or the python notebook follow the instructions \nhere\n.\n\n\nNote\n: if you followed these instructions to install on a local Ubuntu workstation, instead of an AWS remote instance, you can now use that same machine as client. Just point your browser to:\n\n \nWeb UI\n\n\n \nFile transfer - if installed\n\n\n \nPython notebook\n\n\n \nSearch UI",
+            "title": "EC2 instance setup"
+        },
+        {
+            "location": "/aws/#ec2-instance-setup",
+            "text": "This page details  how to setup a  Stellar  server  using a cloud-based machine.\nThe installation procedure refers to Amazon public cloud service AWS.",
+            "title": "EC2 instance setup"
+        },
+        {
+            "location": "/aws/#instance-launch",
+            "text": "For a  Stellar  server Amazon EC2 (a service within AWS) is used. The general\nprocedure for launching an EC2 server ( instance ) is covered by  Amazon's\ndocumentation .  Select an instance type that fulfills  Stellar   server\nrequirements .  For the operating system (Ubuntu Server 16.04 LTS)\nthe Amazon AMI with code ami-33ab5251 is recommended.  Without  further  configuration,  EC2  instances  can be  reached  via  SSH  und\nkey-pair-based  authentication. This  configuration  is  sufficient for  running Stellar .",
+            "title": "Instance launch"
+        },
+        {
+            "location": "/aws/#basic-install-as-user-ubuntu",
+            "text": "The following steps are necessary to install  all the software which is not part\nof  Stellar  server installation, but is required to complete it.  These steps are performed as the  user  ubuntu , which has administrative rights\non the EC2 Ubuntu instances.  Connecting to the remote instance requires an  SSH client .  For instance,  under Linux or  OSX, from a  terminal use the  following command,\nwhere  <EC2IP>  is the IP address and  the  <EC2KEY>  is the private key ( .pem \nfile) provided by AWS upon launch:  ssh -i <EC2KEY> ubuntu@<EC2IP>  If succesful, the command will present a remote terminal.  All following\ncommands should be issued inside the remote terminal.u",
+            "title": "Basic install as user ubuntu"
+        },
+        {
+            "location": "/aws/#install-additional-ubuntu-packages",
+            "text": "Install the following packages, which are officially part of the Ubuntu server\n16.04 distribution. Issue in sequence the commands:  # Update package list.\nsudo apt-get update\n\n# Get tools needed for installation/maintenance.\nsudo apt-get install -y \\\n  aptitude \\\n  apt-transport-https \\\n  ca-certificates \\\n  curl \\\n  wget \\\n  less \\\n  screen\n\n# Install python.\nsudo apt-get install -y \\\n  ipython3 \\\n  ipython3-notebook \\\n  python3-pip\n\n# Install a web browser.\nsudo apt-get install -y firefox",
+            "title": "Install additional Ubuntu packages"
+        },
+        {
+            "location": "/aws/#install-docker",
+            "text": "To install  Docker  issue these commands:  curl -fsSL https://download.docker.com/linux/ubuntu/gpg > docker.key\n\nsudo apt-key add docker.key\n\nsudo add-apt-repository \"deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable\"\n\nsudo apt-get update\n\nsudo apt-get install -y docker-ce\n\nsudo usermod -aG docker ubuntu  Close the  SSH connection with   exit  and connect  again. Then test  the Docker\ninstallation with:  docker run hello-world  A Docker container should get downloaded and executed. It will print the message Hello from Docker!  and additional useful information.",
+            "title": "Install Docker"
+        },
+        {
+            "location": "/aws/#install-docker-compose",
+            "text": "To install  docker-compose  issue this commands:  sudo curl -L https://github.com/docker/compose/releases/download/1.18.0/docker-compose-`uname -s`-`uname -m` -o /usr/local/bin/docker-compose\n\nsudo chmod +x /usr/local/bin/docker-compose\n\nsudo ln -s /usr/local/bin/docker-compose /usr/bin\n\ndocker-compose --version",
+            "title": "Install docker-compose"
+        },
+        {
+            "location": "/aws/#create-the-stellar-user",
+            "text": "Create the user  stellar  which will run the  Stellar  platform.  sudo addgroup --gid 1001 stellar\nsudo adduser --uid 1001 --gid 1001 --disabled-password --gecos stellar,,,, stellar\nsudo usermod -aG docker stellar  Complete the new user setup.  # Become user stellar\nsudo -i -u stellar\n\n# Create an directory for user executables\nmkdir -p ~/bin\n\n# Generate and activate a key pair for stellar\nssh-keygen -t rsa -C \"stellar@localhost\"\n# Press enter at all questions.\ncat ~/.ssh/id_rsa.pub >> ~/.ssh/authorized_keys  Go back to being user  ubuntu  and retrieve the new user's access credentials:  exit\nsudo cp /home/stellar/.ssh/id_rsa /home/ubuntu/stellar.pem\nsudo chown ubuntu:ubuntu /home/ubuntu/stellar.pem",
+            "title": "Create the stellar user"
+        },
+        {
+            "location": "/aws/#create-stellar-working-directory",
+            "text": "sudo rm -rf /opt/stellar\n\nsudo mkdir -p /opt/stellar\n\nsudo chown -R stellar:stellar /opt/stellar",
+            "title": "Create Stellar working directory"
+        },
+        {
+            "location": "/aws/#install-nodejs-and-cloudcmd-optional",
+            "text": "The  NodeJS   package  cloudcmd   is not strictly  necessary for   Stellar , but\noffers a convenient way of remotely exchanging data between client and server.  If  this package  is not  installed, users  is supposed  to have  a remote  copy\nutility on  their clients (e.g.   scp ,  Filezilla )  to exchange data  with the\nserver.  wget https://nodejs.org/dist/v8.10.0/node-v8.10.0-linux-x64.tar.xz\n\nsudo -i\n\nmkdir -p /opt/sw\n\ncd /opt/sw\n\ntar xJvf /home/ubuntu/node-v8.10.0-linux-x64.tar.xz\n\nPATH=/opt/sw/node-v8.10.0-linux-x64/bin:$PATH npm i cloudcmd -g\n\nexit",
+            "title": "Install NodeJS and cloudcmd (optional)"
+        },
+        {
+            "location": "/aws/#logout-from-server",
+            "text": "Leave the server with command  exit  or closing the SSH client application.  Before continuing  it the  user must  retrieve the new  connection key  that was\ncreated for the  user  stellar .  It was saved  as  /home/ubuntu/stellar.pem  on\nthe server  and it  can be  retrieved with  a remote  copy client  (e.g.   scp , Filezilla ). For instance, on Linux or OSX this command can be used to copy the\nkey in the current directory:  scp -i <EC2KEY> ubuntu@<EC2IP>:/home/ubuntu/stellar.pem .  Note:  it is  advisable to store the key  in a safe place and  remove it from\nthe server.",
+            "title": "Logout from server"
+        },
+        {
+            "location": "/aws/#final-install-as-user-stellar",
+            "text": "After completing the previous steps, the system is ready for a user to log in as\nuser  stellar  to finalize the installation  and start the  Stellar  platform on\nthe server.  Connect to the server again, as  stellar  user. For instance, under Linxu or OSX\nissue:  ssh -i stellar.pem stellar@<EC2IP>  After connecting complete the following steps.",
+            "title": "Final install as user stellar"
+        },
+        {
+            "location": "/aws/#install-jupyter-and-stellar-python-client",
+            "text": "# Install jupyter\npip3 install --user jupyter pandas\n\n# Useful additional packages.\npip3 install --user numpy scikit-learn matplotlib\n\n# Get python client and install it\nwget https://github.com/data61/stellar-py/archive/v0.2.2.tar.gz\ntar xzvf v0.2.2.tar.gz\ncd stellar-py-0.2.2\npip3 install --user .",
+            "title": "Install Jupyter and Stellar python client"
+        },
+        {
+            "location": "/aws/#retrieve-stellar-installation-script",
+            "text": "# Retrieve the scripts\ncd ~/bin\nwget https://github.com/data61/stellar/archive/v0.1.0.tar.gz\ntar xzvf v0.1.0.tar.gz\nrm v0.1.0.tar.gz\n\n# Create a launcher\necho -e \"#\"'!'\"/usr/bin/env bash\\nbash /home/stellar/bin/stellar-0.1.0/scripts/docker/stellar.sh \\\"\\$@\\\"\\n\" > stellar\nchmod +x stellar\ncd",
+            "title": "Retrieve Stellar installation script"
+        },
+        {
+            "location": "/aws/#launch-stellar",
+            "text": "It is now possible to launch  Stellar . Issue the command  stellar start  The  first startup  may  take  several minutes,  as  the  Docker containers  are\ndownloaded. To stop  Stellar  use:  stellar stop",
+            "title": "Launch stellar"
+        },
+        {
+            "location": "/aws/#launch-the-jupyter-notebook-server-optional",
+            "text": "It is optional, but  recommended to launch a Jupyter notebook  server.   Create the Jupyter configuration for the server:  mkdir -p ~/.jupyter\necho \"c.NotebookApp.token = ''\" > ~/.jupyter/jupyter_notebook_config.py\necho \"c.NotebookApp.password = ''\" >> ~/.jupyter/jupyter_notebook_config.py  Start Jupyter. It is also recommended  to start it within a terminal multiplexer\n(like  GNU screen ), with:  screen -dmS jupyter bash -c 'jupyter notebook --no-browser ~/stellar-py-0.2.2/examples'",
+            "title": "Launch the Jupyter notebook server (optional)"
+        },
+        {
+            "location": "/aws/#launch-cloudcmd-optional",
+            "text": "This step is  optional, but can make remote file  exchange much more convenient.\nIt is  recommended to start  cloudcmd within  a terminal multiplexer  (like  GNU\nscreen ), with:  screen -dmS cloudcmd bash -c 'PATH=/opt/sw/node-v8.10.0-linux-x64/bin:$PATH cloudcmd --port 7777 --root /opt/stellar/data --no-console --no-terminal --no-vim --one-panel-mode --no-config-dialog'",
+            "title": "Launch cloudcmd (optional)"
+        },
+        {
+            "location": "/aws/#use-stellar",
+            "text": "Stellar is now ready on your server .",
+            "title": "Use Stellar"
+        },
+        {
+            "location": "/aws/#copy-data-files",
+            "text": "You may copy over data files using cloudcmd if installed or with a remote copy client.  For instance on Linux and OSX do:  scp -i stellar.pem stellar@<EC2IP>:my-example.csv /opt/stellar/data",
+            "title": "Copy data files"
+        },
+        {
+            "location": "/aws/#connect-to-stellar",
+            "text": "To use  Stellar  UI or the python notebook follow the instructions  here .  Note : if you followed these instructions to install on a local Ubuntu workstation, instead of an AWS remote instance, you can now use that same machine as client. Just point your browser to:   Web UI    File transfer - if installed    Python notebook    Search UI",
+            "title": "Connect to Stellar"
+        },
+        {
+            "location": "/remote/",
+            "text": "Connecting to your Stellar Demo Platform\n\n\nThe following instructions can be used  to connect to a \nStellar\n server, either\nto get console access (to install, start,  stop or configure the platform) or to\ngain browser access to the UI and Python notebook.\n\n\nConnecting with a web browser\n\n\nWhen working on a remote client machine, connecting to the Stellar server through\na web browser installed on the client is the recommended procedure.\n\n\nTo make  the connection  possible, together  with a web  browser, software to\ncreate encrypted SSH \ntunnels\n (also known  as \nport forwarding\n) is required on\nthe client machine.\n\n\nThe general procedure is therefore:\n\n\n\n\nBuild  a tunnel connection  to the server,  forwarding ports 6161  (main UI),\n   7777 (file sharing), 8888 (Python notebook) and 3010 (Search UI). For Windows, this is described \nhere\n. For macOS or Linux, this is described \nhere\n.\n\n\nStart the local browser and open the following links in separate tabs:\n\n\nWeb UI\n\n\nFile transfer - if installed\n\n\nPython notebook\n\n\nSearch UI\n\n\n\n\nNote:\n at the moment the only officially supported browser is \nGoogle\nChrome\n.\n\n\nThe  remainder of  this  document details  the steps  and  required software  to\ncreated a tunnel connection on Linux, macOS and Windows systems.\n\n\nThis procedure was tested, and is guaranteed to work, only on the following systems:\n\n\n\n\nmacOS Sierra or HighSierra, with default SSH client\n\n\nUbuntu Linux 16.04, with default SSH client\n\n\nWindows 10, with PuTTY v0.70\n\n\n\n\nAdditional software\n\n\nThe software packages above are sufficient for importing data into Stellar, triggering the\ngraph analytics pipeline and retrieving the results.  To visualize the output of\ncertain operations a client application capable of displaying\n\nGDF\n and\n\nGraphML\n is\nrequired.\n\n\nThe recommended  application, which has  been tested with \nStellar\n  output data\nformats, is \nGephi\n.\n\n\nConnecting from Windows\n\n\nDownload and install PuTTY \nhttps://www.putty.org\n. You will need PuTTYgen and the PuTTY SSH client itself to connect to the remote machine.\n\n\nPuTTYgen\n\n\nIf you have a \n.pem\n file, the private key format generate by AWS EC2, you can convert it into a format that can be used by PuTTY using PuTTYgen (\n.ppk\n).\n\n\nTo convert your private key:\n\n\n\n\nStart PuTTYgen.\n\n\n\n\nUnder \nType of key to generate\n, choose \nRSA\n\n\n\n\n\n\n\n\nImport the \n.pem\n file.\n\n\n\n\n\n\n\n\nSave private key.\n\n\n\n\n\n\n\n\nPuTTY\n\n\nYou can now connect to the remote machine via PuTTY.\n\n\n\n\nStart PuTTY.\n\n\n\n\nFill in the host name.\n\n\n\n\n\n\n\n\nNavigate to the \nAuth\n section and locate your private key file for authentication.\n\n\n\n\n\n\n\n\nNavigate to the \nTunnels\n section to add 6161, 7777, 8888 and 3010 as new forwarded ports.\n\n\n\n\n\n\nNote:\n 4 ports must be forwarded, but only 3 are visible in the screenshot below.\n\n\n\n\n\n\n\n\nClick \nOpen\n to connect.\n\n\n\n\n\n\n\n\nConnecting from macOS or Linux\n\n\n\n\n\n\nOpen a terminal.\n\n\n\n\n\n\nEnsure that your \n.pem\n file is private with the correct permissions\n   \nbash\n   chmod 400 ~/keys/stellar-demos.pem\n\n\n\n\n\n\nUse the \nssh\n command to connect to the remote machine.\n   \nbash\n   ssh -i ~/keys/stellar-demos.pem ubuntu@REMOTE_IP_ADDRESS\n\n   where \nREMOTE_IP_ADDRESS\n is the address of the remote machine.\n\n\n\n\n\n\nIn a new shell, on the \nlocal\n machine, forward the ports 6161, 7777, 8888 and 3010.\n   \nbash\n   ssh -N -i ~/keys/stellar-demos.pem -L 8888:localhost:8888 -L 6161:localhost:6161 -L 7777:localhost:7777 -L 3010:localhost:3010   ubuntu@REMOTE_IP_ADDRESS\n\n   If you would like to change the port to map to, the syntax for the ssh command is \n[local-port]:localhost:[remote-port]\n\n\n\n\n\n\nOpen the browser on your \nlocal\n machine and use the pages as described \nabove\n\n\n\n\n\n\nTo inspect the Stellar logs on the \nremote\n machine, run the following command\n   \nbash\n   docker logs --follow DOCKER_CONTAINER_NAME\n\n   where \nDOCKER_CONTAINER_NAME\n is the name of one of the running containers. A list of running containers can be shown with the command\n   \nbash\n   docker ps",
+            "title": "Connecting to your Stellar Demo Platform"
+        },
+        {
+            "location": "/remote/#connecting-to-your-stellar-demo-platform",
+            "text": "The following instructions can be used  to connect to a  Stellar  server, either\nto get console access (to install, start,  stop or configure the platform) or to\ngain browser access to the UI and Python notebook.",
+            "title": "Connecting to your Stellar Demo Platform"
+        },
+        {
+            "location": "/remote/#connecting-with-a-web-browser",
+            "text": "When working on a remote client machine, connecting to the Stellar server through\na web browser installed on the client is the recommended procedure.  To make  the connection  possible, together  with a web  browser, software to\ncreate encrypted SSH  tunnels  (also known  as  port forwarding ) is required on\nthe client machine.  The general procedure is therefore:   Build  a tunnel connection  to the server,  forwarding ports 6161  (main UI),\n   7777 (file sharing), 8888 (Python notebook) and 3010 (Search UI). For Windows, this is described  here . For macOS or Linux, this is described  here .  Start the local browser and open the following links in separate tabs:  Web UI  File transfer - if installed  Python notebook  Search UI   Note:  at the moment the only officially supported browser is  Google\nChrome .  The  remainder of  this  document details  the steps  and  required software  to\ncreated a tunnel connection on Linux, macOS and Windows systems.  This procedure was tested, and is guaranteed to work, only on the following systems:   macOS Sierra or HighSierra, with default SSH client  Ubuntu Linux 16.04, with default SSH client  Windows 10, with PuTTY v0.70",
+            "title": "Connecting with a web browser"
+        },
+        {
+            "location": "/remote/#additional-software",
+            "text": "The software packages above are sufficient for importing data into Stellar, triggering the\ngraph analytics pipeline and retrieving the results.  To visualize the output of\ncertain operations a client application capable of displaying GDF  and GraphML  is\nrequired.  The recommended  application, which has  been tested with  Stellar   output data\nformats, is  Gephi .",
+            "title": "Additional software"
+        },
+        {
+            "location": "/remote/#connecting-from-windows",
+            "text": "Download and install PuTTY  https://www.putty.org . You will need PuTTYgen and the PuTTY SSH client itself to connect to the remote machine.",
+            "title": "Connecting from Windows"
+        },
+        {
+            "location": "/remote/#puttygen",
+            "text": "If you have a  .pem  file, the private key format generate by AWS EC2, you can convert it into a format that can be used by PuTTY using PuTTYgen ( .ppk ).  To convert your private key:   Start PuTTYgen.   Under  Type of key to generate , choose  RSA     Import the  .pem  file.     Save private key.",
+            "title": "PuTTYgen"
+        },
+        {
+            "location": "/remote/#putty",
+            "text": "You can now connect to the remote machine via PuTTY.   Start PuTTY.   Fill in the host name.     Navigate to the  Auth  section and locate your private key file for authentication.     Navigate to the  Tunnels  section to add 6161, 7777, 8888 and 3010 as new forwarded ports.    Note:  4 ports must be forwarded, but only 3 are visible in the screenshot below.     Click  Open  to connect.",
+            "title": "PuTTY"
+        },
+        {
+            "location": "/remote/#connecting-from-macos-or-linux",
+            "text": "Open a terminal.    Ensure that your  .pem  file is private with the correct permissions\n    bash\n   chmod 400 ~/keys/stellar-demos.pem    Use the  ssh  command to connect to the remote machine.\n    bash\n   ssh -i ~/keys/stellar-demos.pem ubuntu@REMOTE_IP_ADDRESS \n   where  REMOTE_IP_ADDRESS  is the address of the remote machine.    In a new shell, on the  local  machine, forward the ports 6161, 7777, 8888 and 3010.\n    bash\n   ssh -N -i ~/keys/stellar-demos.pem -L 8888:localhost:8888 -L 6161:localhost:6161 -L 7777:localhost:7777 -L 3010:localhost:3010   ubuntu@REMOTE_IP_ADDRESS \n   If you would like to change the port to map to, the syntax for the ssh command is  [local-port]:localhost:[remote-port]    Open the browser on your  local  machine and use the pages as described  above    To inspect the Stellar logs on the  remote  machine, run the following command\n    bash\n   docker logs --follow DOCKER_CONTAINER_NAME \n   where  DOCKER_CONTAINER_NAME  is the name of one of the running containers. A list of running containers can be shown with the command\n    bash\n   docker ps",
+            "title": "Connecting from macOS or Linux"
+        },
+        {
+            "location": "/server/",
+            "text": "Server-side installation\n\n\nStellar\n is available  as a set of  Docker containers, installed and  run by an\norchestration  script.  These  containers  communicate via  REST  API calls  and\nexchange data through a host volume, that must be mounted inside the containers.\n\n\nThe server installation comprises the following modules:\n- backend (actuall pipeline)\n- config ui, ingestion and indexing access\n- search ui, search access\n- notebook server\n\n\nSupported server environment\n\n\nCurrently, for official  \nStellar\n installations, only \ndeployment  on a single\nmachine\n is supported.\n\n\nHardware requirements\n\n\nThe server machine must fulfill these \nminimal hardware requirements\n:\n\n\n\n\nA  fairly recent \nIntel\n  64 bit  server-class CPU, e.g.  Xeon E7 v3,  4 cores\n  (recommended Xeon E7 v4, 8 cores)\n\n\n16 GB of RAM (32+ GB recommended)\n\n\n\n\nThese requirements are typically sufficient  to run graph fulfilling the current\ndata specifications (50000 nodes).\n\n\nAdditional hardware requirements\n\n\nIf the server machine is to be remotely accessed by the clients, as described in\n\nRemote access\n),  a permanent, low-latency,  large-bandwidth network\nconnection between server and clients is required, such as \nGigabit Ethernet\n.\n\n\nTo install or upgrade \nStellar\n modules from their online repositories (\nData61\nDockerHub\n and \nData61\nGitHub\n) an Internet connection is required during\nthe installation.\n\n\nSoftware requirements\n\n\nThe server machine must be \nequipped with the following base software\n:\n\n\n\n\nOperating system: 64 bit \nUbuntu Server 16.04 LTS\n (Xenial Xerus)\n\n\nDocker\n engine version 17.12.1-ce (or a later, compatible version)\n\n\nDocker orchestration  system  \ndocker-compose\n version  1.18.0  (or a  later,\n  compatible version)\n\n\nJupyter/iPython\n\n\n\n\nIt is responsibility of the users to provide suitable installations of the above\nlisted packages, in  compliance with their IT policies.\n\n\nA  \ndetailed  guide\n  is  provided to  help  installing  these  software\npackages and running Stellar on a cloud-hosted server.\n\n\nAdditional software requirements\n\n\nIf the server machine is to be  remotely accessed by the clients as described in\n\nRemote  access\n)  an  SSH  server  installation  is  required,  like\n\nOpenSSH\n.",
+            "title": "Server-side installation"
+        },
+        {
+            "location": "/server/#server-side-installation",
+            "text": "Stellar  is available  as a set of  Docker containers, installed and  run by an\norchestration  script.  These  containers  communicate via  REST  API calls  and\nexchange data through a host volume, that must be mounted inside the containers.  The server installation comprises the following modules:\n- backend (actuall pipeline)\n- config ui, ingestion and indexing access\n- search ui, search access\n- notebook server",
+            "title": "Server-side installation"
+        },
+        {
+            "location": "/server/#supported-server-environment",
+            "text": "Currently, for official   Stellar  installations, only  deployment  on a single\nmachine  is supported.",
+            "title": "Supported server environment"
+        },
+        {
+            "location": "/server/#hardware-requirements",
+            "text": "The server machine must fulfill these  minimal hardware requirements :   A  fairly recent  Intel   64 bit  server-class CPU, e.g.  Xeon E7 v3,  4 cores\n  (recommended Xeon E7 v4, 8 cores)  16 GB of RAM (32+ GB recommended)   These requirements are typically sufficient  to run graph fulfilling the current\ndata specifications (50000 nodes).",
+            "title": "Hardware requirements"
+        },
+        {
+            "location": "/server/#additional-hardware-requirements",
+            "text": "If the server machine is to be remotely accessed by the clients, as described in Remote access ),  a permanent, low-latency,  large-bandwidth network\nconnection between server and clients is required, such as  Gigabit Ethernet .  To install or upgrade  Stellar  modules from their online repositories ( Data61\nDockerHub  and  Data61\nGitHub ) an Internet connection is required during\nthe installation.",
+            "title": "Additional hardware requirements"
+        },
+        {
+            "location": "/server/#software-requirements",
+            "text": "The server machine must be  equipped with the following base software :   Operating system: 64 bit  Ubuntu Server 16.04 LTS  (Xenial Xerus)  Docker  engine version 17.12.1-ce (or a later, compatible version)  Docker orchestration  system   docker-compose  version  1.18.0  (or a  later,\n  compatible version)  Jupyter/iPython   It is responsibility of the users to provide suitable installations of the above\nlisted packages, in  compliance with their IT policies.  A   detailed  guide   is  provided to  help  installing  these  software\npackages and running Stellar on a cloud-hosted server.",
+            "title": "Software requirements"
+        },
+        {
+            "location": "/server/#additional-software-requirements",
+            "text": "If the server machine is to be  remotely accessed by the clients as described in Remote  access )  an  SSH  server  installation  is  required,  like OpenSSH .",
+            "title": "Additional software requirements"
+        },
+        {
+            "location": "/about/license/",
+            "text": "License\n\n\nCopyright (c) 2017-2018 \nCSIRO Data61\n\n\nLicensed under the Apache License, Version 2.0 (the \"License\"); you may not\nuse the files included in this repository except in compliance with the\nLicense. You may obtain a copy of the License at\n\n\nhttp://www.apache.org/licenses/LICENSE-2.0\n\nUnless required by applicable law or agreed to in writing, software\ndistributed under the License is distributed on an \"AS IS\" BASIS, WITHOUT\nWARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the\nLicense for the specific language governing permissions and limitations under\nthe License.",
+            "title": "License"
+        },
+        {
+            "location": "/about/license/#license",
+            "text": "Copyright (c) 2017-2018  CSIRO Data61  Licensed under the Apache License, Version 2.0 (the \"License\"); you may not\nuse the files included in this repository except in compliance with the\nLicense. You may obtain a copy of the License at  http://www.apache.org/licenses/LICENSE-2.0\n\nUnless required by applicable law or agreed to in writing, software\ndistributed under the License is distributed on an \"AS IS\" BASIS, WITHOUT\nWARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the\nLicense for the specific language governing permissions and limitations under\nthe License.",
+            "title": "License"
+        }
+    ]
+}
